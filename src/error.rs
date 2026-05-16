@@ -76,7 +76,7 @@ impl ContactsError {
         }
 
         let message = CStr::from_ptr(error_ptr).to_string_lossy().into_owned();
-        ffi::cn_string_free(error_ptr);
+        ffi::core::cn_string_free(error_ptr);
 
         if let Ok(payload) = serde_json::from_str::<NSErrorInfo>(&message) {
             Self::Framework(payload)

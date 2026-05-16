@@ -5,6 +5,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("contacts authorization: {status:?}");
 
     let store = CNContactStore::new()?;
+    println!(
+        "default container: {:?}",
+        store.default_container_identifier()
+    );
 
     if status.is_authorized() {
         let request = CNContactFetchRequest::new([
@@ -14,12 +18,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ])
         .with_sort_order(CNContactSortOrder::GivenName);
 
-        for (index, contact) in store
-            .enumerate_contacts_limited(&request, 5)?
-            .into_iter()
-            .enumerate()
-        {
-            println!("{}. {}", index + 1, contact.display_name());
+        match store.enumerate_contacts_limited(&request, 5) {
+            Ok(contacts) => {
+                for (index, contact) in contacts.into_iter().enumerate() {
+                    println!("{}. {}", index + 1, contact.display_name());
+                }
+            }
+            Err(error) => {
+                println!("contact enumeration unavailable in this environment: {error}");
+            }
         }
     } else {
         println!("contacts access not granted; skipping enumeration");

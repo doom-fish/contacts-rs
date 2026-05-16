@@ -2,7 +2,7 @@
 
 Safe Rust bindings for Apple's [Contacts](https://developer.apple.com/documentation/contacts) framework on macOS.
 
-> **Status:** v0.1.0 covers the practical address-book surface for `CNContactStore`, `CNContact` / `CNMutableContact`, `CNContactFetchRequest`, `CNGroup`, `CNContainer`, and `CNSaveRequest`.
+> **Status:** v0.2.0 extends the Swift bridge and safe Rust API across Store, Contact, MutableContact, Group, Container, FetchRequest, FormatAndPrint, ChangeNotifications, Properties, Predicates, VCardSerialization, and ContactRelation.
 
 ## Quick start
 
@@ -24,10 +24,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         CNContactKey::OrganizationName,
         CNContactKey::EmailAddresses,
     ])
-    .with_sort_order(CNContactSortOrder::GivenName);
+    .with_sort_order(CNContactSortOrder::GivenName)
+    .with_descriptor(CNContactFormatter::descriptor_for_required_keys_for_style(
+        CNContactFormatterStyle::FullName,
+    ));
 
     for contact in store.enumerate_contacts_limited(&request, 5)? {
-        println!("{}", contact.display_name());
+        let display_name = CNContactFormatter::string_from_contact(
+            &contact,
+            CNContactFormatterStyle::FullName,
+        )?
+        .unwrap_or_else(|| contact.display_name());
+        println!("{display_name}");
     }
 
     Ok(())
@@ -36,29 +44,46 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Highlights
 
-- `CNContactStore::authorization_status`, `request_access`, `default_container_identifier`
-- Contact enumeration, limited fetches, and identifier-based fetches with `CNContactFetchRequest`
-- `CNContact` snapshots covering names, organization, email addresses, phone numbers, postal addresses, URL addresses, and birthdays
-- `CNMutableContact` plus `CNSaveRequest` helpers for add / update / delete flows
-- `CNGroup` and `CNContainer` listing
+- `CNContactStore` authorization, fetch, save, container, group, and history-token helpers
+- Expanded `CNContact` / `CNMutableContact` coverage for names, phonetics, notes, image data, dates, relations, social profiles, and instant-message addresses
+- `CNMutableGroup`, subgroup/member save operations, and group/container predicate factories
+- `CNContactFetchRequest` with predicates plus additional key descriptors for comparator, formatter, and vCard fetches
+- `CNContactFormatter` and `CNPostalAddressFormatter` string / attributed-string helpers
+- `CNChangeHistoryFetchRequest`, `CNFetchResult`, and `CNContactStoreDidChangeNotification` support
+- `CNLabeledValue`, `CNPhoneNumber`, `CNPostalAddress`, `CNSocialProfile`, `CNInstantMessageAddress`, and `CNContactRelation` value types
+- `CNContactVCardSerialization` round-tripping between `CNContact` values and vCard bytes
+
+## Examples
+
+The crate ships twelve numbered examples, one per logical area, including:
+
+- `01_contacts_store_smoke`
+- `07_format_and_print`
+- `08_change_notifications`
+- `11_vcard_serialization`
+
+Run them all with:
+
+```bash
+for ex in examples/*.rs; do
+  cargo run --example "$(basename "$ex" .rs)"
+done
+```
+
+## Tests and verification
+
+```bash
+cargo clippy --all-targets -- -D warnings
+cargo test
+```
 
 ## Authorization
 
-`Contacts.framework` access is gated by the user's privacy settings. The included smoke example never requests permission; it reports the current status and only enumerates contacts when access is already granted.
+`Contacts.framework` access is gated by the user's privacy settings. Store, group, and container examples never force a permission prompt; they report current availability and keep running in restricted environments.
 
-## Smoke example
+## Coverage audit
 
-Run the framework smoke test with:
-
-```bash
-cargo run --all-features --example 01_contacts_store_smoke
-```
-
-Expected success footer:
-
-```text
-✅ contacts store OK
-```
+See [COVERAGE.md](COVERAGE.md) for the per-area implementation matrix and the explicitly deferred public APIs.
 
 ## License
 
