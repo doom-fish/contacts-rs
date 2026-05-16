@@ -2,7 +2,7 @@
 
 Safe Rust bindings for Apple's [Contacts](https://developer.apple.com/documentation/contacts) framework on macOS.
 
-> **Status:** v0.2.0 extends the Swift bridge and safe Rust API across Store, Contact, MutableContact, Group, Container, FetchRequest, FormatAndPrint, ChangeNotifications, Properties, Predicates, VCardSerialization, and ContactRelation.
+> **Status:** v0.2.1 extends the Swift bridge and safe Rust API across Store, UserDefaults, Contact, MutableContact, Group, Container, FetchRequest, FormatAndPrint, ChangeNotifications, Properties, Predicates, VCardSerialization, ContactRelation, and typed Contacts errors.
 
 ## Quick start
 
@@ -44,23 +44,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Highlights
 
-- `CNContactStore` authorization, fetch, save, container, group, and history-token helpers
-- Expanded `CNContact` / `CNMutableContact` coverage for names, phonetics, notes, image data, dates, relations, social profiles, and instant-message addresses
+- `CNContactStore` authorization, fetch, save, container, group, history-token, and `CNContactsUserDefaults` helpers
+- Expanded `CNContact` / `CNMutableContact` coverage for names, phonetics, notes, image data, dates, relations, social profiles, instant-message addresses, and `NSItemProvider` round-tripping
 - `CNMutableGroup`, subgroup/member save operations, and group/container predicate factories
-- `CNContactFetchRequest` with predicates plus additional key descriptors for comparator, formatter, and vCard fetches
+- `CNContactFetchRequest`, `CNFetchRequest`, and `CNKeyDescriptor` builders for comparator, formatter, vCard, and change-history fetches
 - `CNContactFormatter` and `CNPostalAddressFormatter` string / attributed-string helpers
 - `CNChangeHistoryFetchRequest`, `CNFetchResult`, and `CNContactStoreDidChangeNotification` support
-- `CNLabeledValue`, `CNPhoneNumber`, `CNPostalAddress`, `CNSocialProfile`, `CNInstantMessageAddress`, and `CNContactRelation` value types
+- `CNErrorCode`, `CNLabeledValue`, `CNPhoneNumber`, `CNPostalAddress`, `CNSocialProfile`, `CNInstantMessageAddress`, and `CNContactRelation` value types
 - `CNContactVCardSerialization` round-tripping between `CNContact` values and vCard bytes
 
 ## Examples
 
-The crate ships twelve numbered examples, one per logical area, including:
+The crate ships thirteen numbered examples, one per logical area, including:
 
 - `01_contacts_store_smoke`
 - `07_format_and_print`
 - `08_change_notifications`
 - `11_vcard_serialization`
+- `13_user_defaults`
 
 Run them all with:
 

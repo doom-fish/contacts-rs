@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 - 2026-05-16
+
+- Added `CNContactsUserDefaults` with safe accessors for the shared defaults sort order and country code.
+- Added public `CNFetchRequest` and `CNKeyDescriptor` wrappers plus builder helpers for contact and change-history fetch requests.
+- Added `CNContact` `NSItemProvider` helpers for type identifiers and in-memory item-provider round-tripping.
+- Added typed `CNErrorCode` mappings, a thirteenth numbered example, and integration coverage for the new APIs.
+
 ## 0.2.0 - 2026-05-16
 
 - Split the Swift bridge into logical files for Store, Contact, MutableContact, Group, Container, FetchRequest, FormatAndPrint, ChangeNotifications, Properties, Predicates, VCardSerialization, and ContactRelation.

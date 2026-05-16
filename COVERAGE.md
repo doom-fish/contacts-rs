@@ -16,13 +16,13 @@ Legend:
 | Store | `unifiedMeContactWithKeysToFetch:` | ✅ | Bridged through Objective-C selector dispatch from Swift so it works even when the imported Swift surface is awkward on this toolchain. |
 | Contact | `CNContactType`, `CNContactSortOrder`, `CNContact` value snapshot fields | ✅ | Covers names, organization, phonetics, note, images, dates, relations, social profiles, and instant-message addresses. |
 | Contact | `isKeyAvailable:`, `areKeysAvailable:`, `localizedStringForKey:` | ✅ | Implemented as safe Rust helpers over fetched-key metadata and Swift localization calls. |
-| Contact | `descriptorForAllComparatorKeys` | ✅ | Exposed via `CNContact::descriptor_for_all_comparator_keys()`. |
+| Contact | `descriptorForAllComparatorKeys` and `CNContact+NSItemProvider` | ✅ | Exposed via `CNContact::descriptor_for_all_comparator_keys()` plus item-provider type-identifier/data helpers. |
 | Contact | `comparatorForNameSortOrder:`, `isUnifiedWithContactWithIdentifier:` | 🟡 | Comparator/link-unification behavior is not yet surfaced as a native bridge call. |
 | MutableContact | `CNMutableContact` writable properties | ✅ | Includes clear flags for image/birthday/non-Gregorian birthday plus array setters for multi-value properties. |
 | Group | `CNGroup`, `CNMutableGroup`, group fetch/save operations | ✅ | Includes subgroup/member save operations through `CNSaveRequest`. |
 | Container | `CNContainer`, `CNContainerType`, container fetches | ✅ | Includes predicate-backed fetches. |
-| FetchRequest | `CNContactFetchRequest` init, predicate, keys, mutable/unify/sort flags | ✅ | Added predicate support plus extra descriptor support for formatter/comparator/vCard keys. |
-| FetchRequest | `CNFetchRequest` abstract base class | ⏭️ | Mirrored by the concrete safe wrappers instead of a stand-alone Rust type. |
+| FetchRequest | `CNContactFetchRequest` init, predicate, keys, mutable/unify/sort flags | ✅ | Added predicate support plus generic key-descriptor helpers for formatter/comparator/vCard fetches. |
+| FetchRequest | `CNFetchRequest` abstract base class and `CNKeyDescriptor` protocol | ✅ | Exposed as `contacts::CNFetchRequest` plus `contacts::CNKeyDescriptor` builders for contact and change-history fetch requests. |
 | FormatAndPrint | `CNContactFormatter` required-key descriptors, string formatting, attributed formatting, name order, delimiter | ✅ | Returned attributed strings include the property metadata exported by Contacts. |
 | FormatAndPrint | `CNPostalAddressFormatter` string/attributed formatting and style selection | ✅ | Implemented via in-memory `CNPostalAddress` conversion through the Swift bridge. |
 | ChangeNotifications | `CNContactStoreDidChangeNotification` | ✅ | Exposed as `contact_store_did_change_notification_name()`. |
@@ -38,6 +38,6 @@ Legend:
 | VCardSerialization | `CNContactVCardSerialization` required-key descriptor, serialize, deserialize | ✅ | Round-trips `CNContact` values to/from vCard bytes. |
 | ContactRelation | `CNContactRelation` value type | ✅ | Safe Rust wrapper plus example/test coverage. |
 | ContactRelation | Contact-relation label constant family | 🟡 | Custom labels work, but raw exported relation constants are not all surfaced as dedicated Rust constants yet. |
-| Extra public API | `CNContactsUserDefaults` | ⏭️ | Extra public framework area outside the requested logical split. |
-| Extra public API | `CNContact+NSItemProvider` | ⏭️ | NSItemProvider integration category is outside this crate's scope. |
-| Extra public API | `CNError.h` constant families | ⏭️ | The crate preserves `NSError` domain/code/message details but does not yet wrap every `CNError` constant as typed Rust API. |
+| UserDefaults | `CNContactsUserDefaults` | ✅ | Implemented in `src/user_defaults.rs` + `swift-bridge/Sources/ContactsBridge/UserDefaults.swift`. |
+| Error | `CNErrorCode` | ✅ | `contacts::CNErrorCode` provides typed mappings for Contacts `NSError` codes. |
+| Extra public API | Remaining `CNError.h` constants | ⏭️ | `CNErrorDomain` and the `CNErrorUserInfo*` keys remain deferred. |

@@ -6,7 +6,10 @@ use crate::contact_relation::CNContactRelation;
 use crate::error::ContactsError;
 use crate::fetch_request::CNAdditionalKeyDescriptor;
 use crate::ffi;
-use crate::private::{json_cstring, take_required_string};
+use crate::private::{
+    cstring_from_str, decode_base64_string, encode_base64_bytes, json_cstring, parse_json_ptr,
+    take_required_string,
+};
 use crate::properties::{
     CNDateComponents, CNInstantMessageAddress, CNLabeledValue, CNPhoneNumber, CNPostalAddress,
     CNSocialProfile,
@@ -29,6 +32,17 @@ pub enum CNContactSortOrder {
     UserDefault,
     GivenName,
     FamilyName,
+}
+
+impl CNContactSortOrder {
+    pub(crate) const fn from_raw(raw: i32) -> Self {
+        match raw {
+            1 => Self::UserDefault,
+            2 => Self::GivenName,
+            3 => Self::FamilyName,
+            _ => Self::None,
+        }
+    }
 }
 
 /// Contact keys available via `CNContact`.
@@ -212,5 +226,102 @@ impl CNContact {
 
     pub fn descriptor_for_all_comparator_keys() -> CNAdditionalKeyDescriptor {
         CNAdditionalKeyDescriptor::ComparatorKeys
+    }
+
+    pub fn readable_type_identifiers_for_item_provider() -> Result<Vec<String>, ContactsError> {
+        let mut error = core::ptr::null_mut();
+        let value = unsafe {
+            ffi::contact::cn_contact_item_provider_readable_type_identifiers_json(&mut error)
+        };
+        if value.is_null() {
+            Err(unsafe {
+                ContactsError::from_error_ptr(
+                    error,
+                    "CNContact.readableTypeIdentifiersForItemProvider failed",
+                )
+            })
+        } else {
+            unsafe { parse_json_ptr(value, "CNContact.readableTypeIdentifiersForItemProvider") }
+        }
+    }
+
+    pub fn writable_type_identifiers_for_item_provider(
+        &self,
+    ) -> Result<Vec<String>, ContactsError> {
+        let contact_json = json_cstring(self, "CNContact")?;
+        let mut error = core::ptr::null_mut();
+        let value = unsafe {
+            ffi::contact::cn_contact_item_provider_writable_type_identifiers_json(
+                contact_json.as_ptr(),
+                &mut error,
+            )
+        };
+        if value.is_null() {
+            Err(unsafe {
+                ContactsError::from_error_ptr(
+                    error,
+                    "CNContact.writableTypeIdentifiersForItemProvider failed",
+                )
+            })
+        } else {
+            unsafe { parse_json_ptr(value, "CNContact.writableTypeIdentifiersForItemProvider") }
+        }
+    }
+
+    pub fn item_provider_data(&self, type_identifier: &str) -> Result<Vec<u8>, ContactsError> {
+        let contact_json = json_cstring(self, "CNContact")?;
+        let type_identifier = cstring_from_str(type_identifier, "NSItemProvider type identifier")?;
+        let mut error = core::ptr::null_mut();
+        let value = unsafe {
+            ffi::contact::cn_contact_item_provider_data_from_contact_json(
+                contact_json.as_ptr(),
+                type_identifier.as_ptr(),
+                &mut error,
+            )
+        };
+        if value.is_null() {
+            Err(unsafe {
+                ContactsError::from_error_ptr(
+                    error,
+                    "CNContact.loadData(withTypeIdentifier:) failed",
+                )
+            })
+        } else {
+            let base64 =
+                unsafe { take_required_string(value, "CNContact.loadData(withTypeIdentifier:)") }?;
+            decode_base64_string(&base64, "CNContact.loadData(withTypeIdentifier:)")
+        }
+    }
+
+    pub fn from_item_provider_data(
+        data: &[u8],
+        type_identifier: &str,
+    ) -> Result<Self, ContactsError> {
+        let base64_data =
+            cstring_from_str(&encode_base64_bytes(data), "CNContact item-provider data")?;
+        let type_identifier = cstring_from_str(type_identifier, "NSItemProvider type identifier")?;
+        let mut error = core::ptr::null_mut();
+        let value = unsafe {
+            ffi::contact::cn_contact_from_item_provider_data_base64(
+                base64_data.as_ptr(),
+                type_identifier.as_ptr(),
+                &mut error,
+            )
+        };
+        if value.is_null() {
+            Err(unsafe {
+                ContactsError::from_error_ptr(
+                    error,
+                    "CNContact.object(withItemProviderData:typeIdentifier:) failed",
+                )
+            })
+        } else {
+            unsafe {
+                parse_json_ptr(
+                    value,
+                    "CNContact.object(withItemProviderData:typeIdentifier:)",
+                )
+            }
+        }
     }
 }

@@ -4,10 +4,10 @@ Methodology: full audit of top-level Contacts.framework public declarations (int
 Strictness: a symbol only counts as verified when the crate exposes a dedicated public Rust type/enum/helper for it; raw constant families therefore dominate the gap count, especially the contact-relation labels.
 
 SDK_PUBLIC_SYMBOLS: 360
-VERIFIED: 90
-GAPS: 270
+VERIFIED: 95
+GAPS: 265
 EXEMPT: 0
-COVERAGE_PCT: 25.00%
+COVERAGE_PCT: 26.39%
 
 ## 🟢 VERIFIED
 | Symbol | Kind | Header | Wrapped by |
@@ -31,8 +31,10 @@ COVERAGE_PCT: 25.00%
 | CNContactProperty | interface | CNContactProperty.h | contacts::CNContactProperty |
 | CNContactRelation | interface | CNContactRelation.h | contacts::CNContactRelation |
 | CNContactStore | interface | CNContactStore.h | contacts::CNContactStore |
+| CNContactsUserDefaults | interface | CNContactsUserDefaults.h | contacts::CNContactsUserDefaults |
 | CNContactVCardSerialization | interface | CNContactVCardSerialization.h | contacts::CNContactVCardSerialization |
 | CNContainer | interface | CNContainer.h | contacts::CNContainer |
+| CNFetchRequest | interface | CNFetchRequest.h | contacts::CNFetchRequest |
 | CNFetchResult | interface | CNFetchResult.h | contacts::CNFetchResult<T> |
 | CNGroup | interface | CNGroup.h | contacts::CNGroup |
 | CNInstantMessageAddress | interface | CNInstantMessageAddress.h | contacts::CNInstantMessageAddress |
@@ -45,14 +47,17 @@ COVERAGE_PCT: 25.00%
 | CNSaveRequest | interface | CNSaveRequest.h | contacts::CNSaveRequest |
 | CNSocialProfile | interface | CNSocialProfile.h | contacts::CNSocialProfile |
 | CNContact (Predicates) | category | CNContact+Predicates.h | contacts::CNContactPredicate |
+| CNContact (NSItemProvider) | category | CNContact+NSItemProvider.h | contacts::CNContact::{readable_type_identifiers_for_item_provider, writable_type_identifiers_for_item_provider, item_provider_data, from_item_provider_data} |
 | CNContainer (Predicates) | category | CNContainer+Predicates.h | contacts::CNContainerPredicate |
 | CNGroup (Predicates) | category | CNGroup+Predicates.h | contacts::CNGroupPredicate |
+| CNKeyDescriptor | protocol | CNContact.h | contacts::CNKeyDescriptor |
 | CNAuthorizationStatus | enum | CNContactStore.h | contacts::CNAuthorizationStatus |
 | CNContactDisplayNameOrder | enum | CNContactFormatter.h | contacts::CNContactDisplayNameOrder |
 | CNContactFormatterStyle | enum | CNContactFormatter.h | contacts::CNContactFormatterStyle |
 | CNContactSortOrder | enum | CNContact.h | contacts::CNContactSortOrder |
 | CNContactType | enum | CNContact.h | contacts::CNContactType |
 | CNContainerType | enum | CNContainer.h | contacts::CNContainerType |
+| CNErrorCode | enum | CNError.h | contacts::CNErrorCode |
 | CNPostalAddressFormatterStyle | enum | CNPostalAddressFormatter.h | contacts::CNPostalAddressFormatterStyle |
 | CNContactBirthdayKey | const | CNContact.h | contacts::CNContactKey::Birthday |
 | CNContactDatesKey | const | CNContact.h | contacts::CNContactKey::Dates |
@@ -106,15 +111,10 @@ COVERAGE_PCT: 25.00%
 ## 🔴 GAPS
 | Symbol | Kind | Header | Notes |
 | --- | --- | --- | --- |
-| CNContactsUserDefaults | interface | CNContactsUserDefaults.h | User-defaults API is not wrapped. |
-| CNFetchRequest | interface | CNFetchRequest.h | The abstract base fetch request is not exposed separately. |
 | CNMutablePostalAddress | interface | CNMutablePostalAddress.h | The crate exposes value-style CNPostalAddress, not CNMutablePostalAddress. |
-| CNContact (NSItemProvider) | category | CNContact+NSItemProvider.h | NSItemProvider category is not wrapped. |
-| NSString (Contacts) | category | CNContact.h | Descriptor semantics are modeled with CNContactKey/CNAdditionalKeyDescriptor instead of the NSString category. |
+| NSString (Contacts) | category | CNContact.h | Descriptor semantics are modeled with CNContactKey/CNKeyDescriptor instead of the NSString category. |
 | CNChangeHistoryEventVisitor | protocol | CNChangeHistoryEvent.h | Change history is flattened into a Rust enum; the visitor protocol is not exposed. |
-| CNKeyDescriptor | protocol | CNContact.h | The generic descriptor protocol is not public; only concrete Rust enums model common descriptors. |
 | CNEntityType | enum | CNContactStore.h | Store helpers are hard-coded to contacts; CNEntityType is not public. |
-| CNErrorCode | enum | CNError.h | NSErrorInfo.code preserves numeric error codes, but there is no typed CNErrorCode wrapper. |
 | CNContactPropertyNotFetchedExceptionName | const | CNContact.h | The Rust API avoids this exception by tracking fetched keys explicitly. |
 | CNContainerIdentifierKey | const | CNContainer.h | Container property key constants are not wrapped as dedicated Rust constants or enums. |
 | CNContainerNameKey | const | CNContainer.h | Container property key constants are not wrapped as dedicated Rust constants or enums. |

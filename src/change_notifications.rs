@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::contact::{CNContact, CNContactKey};
 use crate::error::ContactsError;
-use crate::fetch_request::CNAdditionalKeyDescriptor;
+use crate::fetch_request::{CNAdditionalKeyDescriptor, CNKeyDescriptor};
 use crate::ffi;
 use crate::group::CNGroup;
 use crate::private::take_required_string;
@@ -54,6 +54,21 @@ impl CNChangeHistoryFetchRequest {
         self
     }
 
+    pub fn with_key_descriptor(mut self, descriptor: CNKeyDescriptor) -> Self {
+        self.push_key_descriptor(descriptor);
+        self
+    }
+
+    pub fn with_key_descriptors(
+        mut self,
+        descriptors: impl IntoIterator<Item = CNKeyDescriptor>,
+    ) -> Self {
+        for descriptor in descriptors {
+            self.push_key_descriptor(descriptor);
+        }
+        self
+    }
+
     pub fn with_additional_descriptors(
         mut self,
         descriptors: impl IntoIterator<Item = CNAdditionalKeyDescriptor>,
@@ -83,6 +98,29 @@ impl CNChangeHistoryFetchRequest {
     ) -> Self {
         self.excluded_transaction_authors = authors.into_iter().map(Into::into).collect();
         self
+    }
+
+    pub fn key_descriptors(&self) -> Vec<CNKeyDescriptor> {
+        self.additional_contact_keys
+            .iter()
+            .copied()
+            .map(CNKeyDescriptor::from)
+            .chain(
+                self.additional_key_descriptors
+                    .iter()
+                    .cloned()
+                    .map(CNKeyDescriptor::from),
+            )
+            .collect()
+    }
+
+    fn push_key_descriptor(&mut self, descriptor: CNKeyDescriptor) {
+        match descriptor {
+            CNKeyDescriptor::ContactKey { key } => self.additional_contact_keys.push(key),
+            CNKeyDescriptor::Additional { descriptor } => {
+                self.additional_key_descriptors.push(descriptor);
+            }
+        }
     }
 }
 

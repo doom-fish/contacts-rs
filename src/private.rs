@@ -66,6 +66,10 @@ pub fn decode_base64_string(value: &str, context: &str) -> Result<Vec<u8>, Conta
     })
 }
 
+pub fn encode_base64_bytes(value: &[u8]) -> String {
+    STANDARD.encode(value)
+}
+
 pub mod serde_base64 {
     pub mod required {
         use base64::{engine::general_purpose::STANDARD, Engine as _};

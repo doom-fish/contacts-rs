@@ -262,3 +262,119 @@ public func cn_contact_localized_string_for_key(
     return nil
   }
 }
+
+func cnrAvailableContactKeys(_ contact: CNContact) -> Set<CNRContactKey> {
+  Set(cnrAllContactKeys().filter { contact.isKeyAvailable(cnrContactKeyConstant($0) as String) })
+}
+
+@_cdecl("cn_contact_item_provider_readable_type_identifiers_json")
+public func cn_contact_item_provider_readable_type_identifiers_json(
+  _ outError: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?
+) -> UnsafeMutablePointer<CChar>? {
+  do {
+    return cnrCString(try cnrEncodeJSON(CNContact.readableTypeIdentifiersForItemProvider))
+  } catch {
+    cnrSetError(outError, error)
+    return nil
+  }
+}
+
+@_cdecl("cn_contact_item_provider_writable_type_identifiers_json")
+public func cn_contact_item_provider_writable_type_identifiers_json(
+  _ contactJSON: UnsafePointer<CChar>?,
+  _ outError: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?
+) -> UnsafeMutablePointer<CChar>? {
+  do {
+    let contact = try cnrDecodeJSON(contactJSON, as: CNRContactPayload.self)
+    return cnrCString(try cnrEncodeJSON(cnrMutableContact(from: contact).writableTypeIdentifiersForItemProvider))
+  } catch {
+    cnrSetError(outError, error)
+    return nil
+  }
+}
+
+@_cdecl("cn_contact_item_provider_data_from_contact_json")
+public func cn_contact_item_provider_data_from_contact_json(
+  _ contactJSON: UnsafePointer<CChar>?,
+  _ typeIdentifier: UnsafePointer<CChar>?,
+  _ outError: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?
+) -> UnsafeMutablePointer<CChar>? {
+  guard let typeIdentifier else {
+    cnrSetMessageError(outError, message: "missing NSItemProvider type identifier")
+    return nil
+  }
+
+  do {
+    let contact = try cnrDecodeJSON(contactJSON, as: CNRContactPayload.self)
+    let nativeContact = cnrMutableContact(from: contact)
+    let semaphore = DispatchSemaphore(value: 0)
+    var encodedData: String?
+    var capturedError: Error?
+
+    _ = nativeContact.loadData(
+      withTypeIdentifier: String(cString: typeIdentifier),
+      forItemProviderCompletionHandler: { data, error in
+        encodedData = data?.base64EncodedString()
+        capturedError = error
+        semaphore.signal()
+      })
+
+    if semaphore.wait(timeout: .now() + .seconds(30)) == .timedOut {
+      throw NSError(
+        domain: "contacts-rs",
+        code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "CNContact.loadData(withTypeIdentifier:) timed out"]
+      )
+    }
+
+    if let capturedError {
+      throw capturedError
+    }
+    guard let encodedData else {
+      throw NSError(
+        domain: "contacts-rs",
+        code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "CNContact.loadData(withTypeIdentifier:) returned no data"]
+      )
+    }
+
+    return cnrCString(encodedData)
+  } catch {
+    cnrSetError(outError, error)
+    return nil
+  }
+}
+
+@_cdecl("cn_contact_from_item_provider_data_base64")
+public func cn_contact_from_item_provider_data_base64(
+  _ base64Data: UnsafePointer<CChar>?,
+  _ typeIdentifier: UnsafePointer<CChar>?,
+  _ outError: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?
+) -> UnsafeMutablePointer<CChar>? {
+  guard let base64Data else {
+    cnrSetMessageError(outError, message: "missing item-provider data")
+    return nil
+  }
+  guard let typeIdentifier else {
+    cnrSetMessageError(outError, message: "missing NSItemProvider type identifier")
+    return nil
+  }
+
+  do {
+    guard let data = Data(base64Encoded: String(cString: base64Data)) else {
+      throw NSError(
+        domain: "contacts-rs",
+        code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "invalid base64 item-provider payload"]
+      )
+    }
+    let contact = try CNContact.object(
+      withItemProviderData: data,
+      typeIdentifier: String(cString: typeIdentifier))
+    let requestedKeys = cnrAvailableContactKeys(contact)
+    return cnrCString(try cnrEncodeJSON(cnrEncodeContact(contact, requestedKeys: requestedKeys)))
+  } catch {
+    cnrSetError(outError, error)
+    return nil
+  }
+}

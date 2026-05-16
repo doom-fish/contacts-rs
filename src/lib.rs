@@ -27,6 +27,7 @@ mod private;
 pub mod properties;
 pub mod store;
 pub mod types;
+pub mod user_defaults;
 pub mod vcard_serialization;
 
 pub use change_notifications::{
@@ -36,8 +37,10 @@ pub use change_notifications::{
 pub use contact::{CNContact, CNContactKey, CNContactSortOrder, CNContactType};
 pub use contact_relation::CNContactRelation;
 pub use container::{CNContainer, CNContainerType};
-pub use error::{CNAuthorizationStatus, ContactsError, NSErrorInfo};
-pub use fetch_request::{CNAdditionalKeyDescriptor, CNContactFetchRequest};
+pub use error::{CNAuthorizationStatus, CNErrorCode, ContactsError, NSErrorInfo};
+pub use fetch_request::{
+    CNAdditionalKeyDescriptor, CNContactFetchRequest, CNFetchRequest, CNKeyDescriptor,
+};
 pub use format_and_print::{
     CNAttributedString, CNAttributedStringRun, CNContactDisplayNameOrder, CNContactFormatter,
     CNContactFormatterStyle, CNPostalAddressFormatter, CNPostalAddressFormatterStyle,
@@ -51,6 +54,7 @@ pub use properties::{
     CNSocialProfileKey,
 };
 pub use store::{CNContactStore, CNSaveOperation, CNSaveRequest};
+pub use user_defaults::CNContactsUserDefaults;
 pub use vcard_serialization::CNContactVCardSerialization;
 
 /// Common imports.
@@ -62,8 +66,10 @@ pub mod prelude {
     pub use crate::contact::{CNContact, CNContactKey, CNContactSortOrder, CNContactType};
     pub use crate::contact_relation::CNContactRelation;
     pub use crate::container::{CNContainer, CNContainerType};
-    pub use crate::error::{CNAuthorizationStatus, ContactsError, NSErrorInfo};
-    pub use crate::fetch_request::{CNAdditionalKeyDescriptor, CNContactFetchRequest};
+    pub use crate::error::{CNAuthorizationStatus, CNErrorCode, ContactsError, NSErrorInfo};
+    pub use crate::fetch_request::{
+        CNAdditionalKeyDescriptor, CNContactFetchRequest, CNFetchRequest, CNKeyDescriptor,
+    };
     pub use crate::format_and_print::{
         CNAttributedString, CNAttributedStringRun, CNContactDisplayNameOrder, CNContactFormatter,
         CNContactFormatterStyle, CNPostalAddressFormatter, CNPostalAddressFormatterStyle,
@@ -77,5 +83,6 @@ pub mod prelude {
         CNSocialProfileKey,
     };
     pub use crate::store::{CNContactStore, CNSaveOperation, CNSaveRequest};
+    pub use crate::user_defaults::CNContactsUserDefaults;
     pub use crate::vcard_serialization::CNContactVCardSerialization;
 }

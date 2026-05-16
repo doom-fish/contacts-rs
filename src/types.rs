@@ -5,7 +5,10 @@ pub use crate::change_notifications::{
 pub use crate::contact::{CNContact, CNContactKey, CNContactSortOrder, CNContactType};
 pub use crate::contact_relation::CNContactRelation;
 pub use crate::container::{CNContainer, CNContainerType};
-pub use crate::fetch_request::{CNAdditionalKeyDescriptor, CNContactFetchRequest};
+pub use crate::error::{CNAuthorizationStatus, CNErrorCode, ContactsError, NSErrorInfo};
+pub use crate::fetch_request::{
+    CNAdditionalKeyDescriptor, CNContactFetchRequest, CNFetchRequest, CNKeyDescriptor,
+};
 pub use crate::format_and_print::{
     CNAttributedString, CNAttributedStringRun, CNContactDisplayNameOrder, CNContactFormatter,
     CNContactFormatterStyle, CNPostalAddressFormatter, CNPostalAddressFormatterStyle,
@@ -18,5 +21,6 @@ pub use crate::properties::{
     CNLabeledValue, CNPhoneNumber, CNPostalAddress, CNPostalAddressKey, CNSocialProfile,
     CNSocialProfileKey,
 };
-pub use crate::store::{CNSaveOperation, CNSaveRequest};
+pub use crate::store::{CNContactStore, CNSaveOperation, CNSaveRequest};
+pub use crate::user_defaults::CNContactsUserDefaults;
 pub use crate::vcard_serialization::CNContactVCardSerialization;

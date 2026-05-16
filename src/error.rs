@@ -34,6 +34,111 @@ impl CNAuthorizationStatus {
     }
 }
 
+/// Typed wrapper for `CNErrorCode`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[non_exhaustive]
+pub enum CNErrorCode {
+    CommunicationError,
+    DataAccessError,
+    AuthorizationDenied,
+    NoAccessableWritableContainers,
+    UnauthorizedKeys,
+    FeatureDisabledByUser,
+    FeatureNotAvailable,
+    RecordDoesNotExist,
+    InsertedRecordAlreadyExists,
+    ContainmentCycle,
+    ContainmentScope,
+    ParentRecordDoesNotExist,
+    RecordIdentifierInvalid,
+    RecordNotWritable,
+    ParentContainerNotWritable,
+    ValidationMultipleErrors,
+    ValidationTypeMismatch,
+    ValidationConfigurationError,
+    PredicateInvalid,
+    PolicyViolation,
+    ClientIdentifierInvalid,
+    ClientIdentifierDoesNotExist,
+    ClientIdentifierCollision,
+    ChangeHistoryExpired,
+    ChangeHistoryInvalidAnchor,
+    ChangeHistoryInvalidFetchRequest,
+    VCardMalformed,
+    VCardSummarizationError,
+    Unknown(i64),
+}
+
+impl CNErrorCode {
+    pub const fn from_raw(raw: i64) -> Self {
+        match raw {
+            1 => Self::CommunicationError,
+            2 => Self::DataAccessError,
+            100 => Self::AuthorizationDenied,
+            101 => Self::NoAccessableWritableContainers,
+            102 => Self::UnauthorizedKeys,
+            103 => Self::FeatureDisabledByUser,
+            104 => Self::FeatureNotAvailable,
+            200 => Self::RecordDoesNotExist,
+            201 => Self::InsertedRecordAlreadyExists,
+            202 => Self::ContainmentCycle,
+            203 => Self::ContainmentScope,
+            204 => Self::ParentRecordDoesNotExist,
+            205 => Self::RecordIdentifierInvalid,
+            206 => Self::RecordNotWritable,
+            207 => Self::ParentContainerNotWritable,
+            300 => Self::ValidationMultipleErrors,
+            301 => Self::ValidationTypeMismatch,
+            302 => Self::ValidationConfigurationError,
+            400 => Self::PredicateInvalid,
+            500 => Self::PolicyViolation,
+            600 => Self::ClientIdentifierInvalid,
+            601 => Self::ClientIdentifierDoesNotExist,
+            602 => Self::ClientIdentifierCollision,
+            603 => Self::ChangeHistoryExpired,
+            604 => Self::ChangeHistoryInvalidAnchor,
+            605 => Self::ChangeHistoryInvalidFetchRequest,
+            700 => Self::VCardMalformed,
+            701 => Self::VCardSummarizationError,
+            other => Self::Unknown(other),
+        }
+    }
+
+    pub const fn raw_value(self) -> i64 {
+        match self {
+            Self::CommunicationError => 1,
+            Self::DataAccessError => 2,
+            Self::AuthorizationDenied => 100,
+            Self::NoAccessableWritableContainers => 101,
+            Self::UnauthorizedKeys => 102,
+            Self::FeatureDisabledByUser => 103,
+            Self::FeatureNotAvailable => 104,
+            Self::RecordDoesNotExist => 200,
+            Self::InsertedRecordAlreadyExists => 201,
+            Self::ContainmentCycle => 202,
+            Self::ContainmentScope => 203,
+            Self::ParentRecordDoesNotExist => 204,
+            Self::RecordIdentifierInvalid => 205,
+            Self::RecordNotWritable => 206,
+            Self::ParentContainerNotWritable => 207,
+            Self::ValidationMultipleErrors => 300,
+            Self::ValidationTypeMismatch => 301,
+            Self::ValidationConfigurationError => 302,
+            Self::PredicateInvalid => 400,
+            Self::PolicyViolation => 500,
+            Self::ClientIdentifierInvalid => 600,
+            Self::ClientIdentifierDoesNotExist => 601,
+            Self::ClientIdentifierCollision => 602,
+            Self::ChangeHistoryExpired => 603,
+            Self::ChangeHistoryInvalidAnchor => 604,
+            Self::ChangeHistoryInvalidFetchRequest => 605,
+            Self::VCardMalformed => 700,
+            Self::VCardSummarizationError => 701,
+            Self::Unknown(raw) => raw,
+        }
+    }
+}
+
 /// Structured `NSError` details encoded by the Swift bridge.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NSErrorInfo {

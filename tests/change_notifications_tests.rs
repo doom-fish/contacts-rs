@@ -9,6 +9,10 @@ fn notification_name_is_not_empty() {
 #[test]
 fn change_history_request_builder_sets_flags() {
     let request = CNChangeHistoryFetchRequest::new()
+        .with_key_descriptors([
+            CNKeyDescriptor::from(CNContactKey::GivenName),
+            CNKeyDescriptor::from(CNContact::descriptor_for_all_comparator_keys()),
+        ])
         .with_include_group_changes(true)
         .with_excluded_transaction_authors(["contacts-rs-tests"]);
 
@@ -16,5 +20,12 @@ fn change_history_request_builder_sets_flags() {
     assert_eq!(
         request.excluded_transaction_authors,
         vec!["contacts-rs-tests"]
+    );
+    assert_eq!(
+        request.key_descriptors(),
+        vec![
+            CNKeyDescriptor::contact_key(CNContactKey::GivenName),
+            CNKeyDescriptor::additional(CNContact::descriptor_for_all_comparator_keys()),
+        ],
     );
 }
