@@ -31,6 +31,10 @@ pub mod types;
 pub mod user_defaults;
 pub mod vcard_serialization;
 
+#[cfg(feature = "async")]
+#[cfg_attr(docsrs, doc(cfg(feature = "async")))]
+pub mod async_api;
+
 pub use change_notifications::{
     contact_store_did_change_notification_name, CNChangeHistoryEvent, CNChangeHistoryEventVisitor,
     CNChangeHistoryFetchRequest, CNFetchResult,

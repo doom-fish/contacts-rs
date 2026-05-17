@@ -42,6 +42,46 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
+## Async API
+
+Enable the `async` feature for executor-agnostic `Future` wrappers over
+`CNContactStore` completion-handler APIs:
+
+```toml
+[dependencies]
+contacts = { version = "0.3", features = ["async"] }
+```
+
+```rust,no_run
+use contacts::async_api::AsyncCNContactStore;
+use contacts::store::CNEntityType;
+
+async fn run() -> Result<(), Box<dyn std::error::Error>> {
+    // Request access asynchronously
+    let granted = AsyncCNContactStore::request_access(CNEntityType::Contacts).await?;
+    println!("granted: {granted}");
+
+    // Enumerate contacts asynchronously (collects all into Vec)
+    use contacts::store::CNContactStore;
+    use contacts::fetch_request::CNContactFetchRequest;
+    use contacts::contact::CNContactKey;
+
+    let store = CNContactStore::new()?;
+    let request = CNContactFetchRequest::new([CNContactKey::GivenName, CNContactKey::FamilyName]);
+    let contacts = AsyncCNContactStore::enumerate_contacts(&store, &request).await?;
+    println!("{} contacts", contacts.len());
+    Ok(())
+}
+```
+
+| Apple API | Rust Future | Notes |
+|-----------|-------------|-------|
+| `requestAccess(for:completionHandler:)` | `RequestAccessFuture` | `Future<bool>` |
+| `enumerateContacts(with:usingBlock:)` | `EnumerateContactsFuture` | Collects all → `Future<Vec<CNContact>>` |
+
+A `Stream`-based Tier-2 wrapper for incremental enumeration will follow in a
+future release.
+
 ## Highlights
 
 - `CNContactStore` authorization, fetch, save, container, group, history-token, `CNEntityType`, and `CNContactsUserDefaults` helpers

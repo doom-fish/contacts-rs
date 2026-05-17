@@ -47,4 +47,18 @@ extern "C" {
         request_json: *const c_char,
         out_error: *mut *mut c_char,
     ) -> i32;
+
+    // Async thunks — linked unconditionally; used only from async_api (feature = "async")
+    pub fn cn_request_access_async(
+        entity_type: i32,
+        cb: extern "C" fn(bool, *const c_char, *mut c_void),
+        ctx: *mut c_void,
+    );
+    pub fn cn_enumerate_contacts_async(
+        store: *mut c_void,
+        request_json: *const c_char,
+        limit: usize,
+        cb: extern "C" fn(*mut c_char, *const c_char, *mut c_void),
+        ctx: *mut c_void,
+    );
 }

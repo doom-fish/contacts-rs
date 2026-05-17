@@ -235,6 +235,11 @@ impl CNContactStore {
         Ok(Self { raw })
     }
 
+    /// Returns the raw opaque pointer to the underlying `CNContactStore`.
+    pub(crate) fn as_ptr(&self) -> *mut c_void {
+        self.raw.as_ptr()
+    }
+
     pub fn authorization_status() -> CNAuthorizationStatus {
         Self::authorization_status_for_entity_type(CNEntityType::Contacts)
     }

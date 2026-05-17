@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.0 - 2026-05-17
+
+### Added — Async API (Tier 1)
+
+New `async` Cargo feature enabling executor-agnostic `Future` wrappers for
+`CNContactStore` completion-handler APIs.
+
+| Apple API | Rust type | Notes |
+|-----------|-----------|-------|
+| `CNContactStore.requestAccess(for:completionHandler:)` | `RequestAccessFuture` | Completion handler → `Future<bool>` |
+| `CNContactStore.enumerateContacts(with:usingBlock:)` | `EnumerateContactsFuture` | Collects all matching contacts into `Vec<CNContact>` |
+
+The `async_api` module is gated behind `features = ["async"]`.  A
+`Stream`-based Tier-2 wrapper for incremental enumeration will follow in a
+future release.
+
+Two new examples:
+- `14_async_request_access` — async authorization request
+- `15_async_enumerate_contacts` — async contact enumeration with limit
+
+Sync-only APIs (`containers(matching:)`, `fetch_change_history`) have no async
+wrapper — they are already instant on the calling thread.
+
+Change notifications (`NotificationCenter`) are deferred to Tier 2 (Stream).
+
 ## 0.2.2 - 2026-05-17
 
 - Reached 100% top-level `Contacts.framework` declaration coverage in `COVERAGE_AUDIT.md`.
