@@ -4,7 +4,10 @@ use contacts::prelude::*;
 
 #[test]
 fn authorization_status_smoke() {
-    let _ = CNContactStore::authorization_status();
+    assert_eq!(
+        CNContactStore::authorization_status(),
+        CNContactStore::authorization_status_for_entity_type(CNEntityType::Contacts)
+    );
 }
 
 #[test]

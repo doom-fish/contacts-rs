@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2 - 2026-05-17
+
+- Reached 100% top-level `Contacts.framework` declaration coverage in `COVERAGE_AUDIT.md`.
+- Added exhaustive typed wrappers for remaining Contacts constant families, including container/group keys, error-domain and user-info keys, phone/email/URL/date labels, instant-message/social-profile services, and every contact-relation label.
+- Added `CNMutablePostalAddress`, `CNEntityType`, `CNChangeHistoryEventVisitor`, and raw `NSString` `CNKeyDescriptor` support.
+
 ## 0.2.1 - 2026-05-16
 
 - Added `CNContactsUserDefaults` with safe accessors for the shared defaults sort order and country code.

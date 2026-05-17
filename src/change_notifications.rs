@@ -26,6 +26,8 @@ pub struct CNChangeHistoryFetchRequest {
     pub additional_contact_keys: Vec<CNContactKey>,
     #[serde(default)]
     pub additional_key_descriptors: Vec<CNAdditionalKeyDescriptor>,
+    #[serde(default)]
+    pub raw_key_descriptors: Vec<String>,
     pub should_unify_results: bool,
     pub mutable_objects: bool,
     pub include_group_changes: bool,
@@ -77,6 +79,19 @@ impl CNChangeHistoryFetchRequest {
         self
     }
 
+    pub fn with_raw_key_descriptor(mut self, descriptor: impl Into<String>) -> Self {
+        self.raw_key_descriptors.push(descriptor.into());
+        self
+    }
+
+    pub fn with_raw_key_descriptors(
+        mut self,
+        descriptors: impl IntoIterator<Item = impl Into<String>>,
+    ) -> Self {
+        self.raw_key_descriptors = descriptors.into_iter().map(Into::into).collect();
+        self
+    }
+
     pub fn with_should_unify_results(mut self, should_unify_results: bool) -> Self {
         self.should_unify_results = should_unify_results;
         self
@@ -111,6 +126,12 @@ impl CNChangeHistoryFetchRequest {
                     .cloned()
                     .map(CNKeyDescriptor::from),
             )
+            .chain(
+                self.raw_key_descriptors
+                    .iter()
+                    .cloned()
+                    .map(CNKeyDescriptor::raw),
+            )
             .collect()
     }
 
@@ -120,8 +141,25 @@ impl CNChangeHistoryFetchRequest {
             CNKeyDescriptor::Additional { descriptor } => {
                 self.additional_key_descriptors.push(descriptor);
             }
+            CNKeyDescriptor::Raw { value } => self.raw_key_descriptors.push(value),
         }
     }
+}
+
+/// Visitor mirroring the `CNChangeHistoryEventVisitor` protocol.
+pub trait CNChangeHistoryEventVisitor {
+    fn visit_drop_everything_event(&mut self);
+    fn visit_add_contact_event(&mut self, contact: &CNContact, container_identifier: Option<&str>);
+    fn visit_update_contact_event(&mut self, contact: &CNContact);
+    fn visit_delete_contact_event(&mut self, contact_identifier: &str);
+
+    fn visit_add_group_event(&mut self, _group: &CNGroup, _container_identifier: &str) {}
+    fn visit_update_group_event(&mut self, _group: &CNGroup) {}
+    fn visit_delete_group_event(&mut self, _group_identifier: &str) {}
+    fn visit_add_member_to_group_event(&mut self, _member: &CNContact, _group: &CNGroup) {}
+    fn visit_remove_member_from_group_event(&mut self, _member: &CNContact, _group: &CNGroup) {}
+    fn visit_add_subgroup_to_group_event(&mut self, _subgroup: &CNGroup, _group: &CNGroup) {}
+    fn visit_remove_subgroup_from_group_event(&mut self, _subgroup: &CNGroup, _group: &CNGroup) {}
 }
 
 /// Flattened Rust representation of `CNChangeHistoryEvent` subclasses.
@@ -165,6 +203,42 @@ pub enum CNChangeHistoryEvent {
         subgroup: CNGroup,
         group: CNGroup,
     },
+}
+
+impl CNChangeHistoryEvent {
+    pub fn accept_visitor(&self, visitor: &mut impl CNChangeHistoryEventVisitor) {
+        match self {
+            Self::DropEverything => visitor.visit_drop_everything_event(),
+            Self::AddContact {
+                contact,
+                container_identifier,
+            } => visitor.visit_add_contact_event(contact, container_identifier.as_deref()),
+            Self::UpdateContact { contact } => visitor.visit_update_contact_event(contact),
+            Self::DeleteContact { contact_identifier } => {
+                visitor.visit_delete_contact_event(contact_identifier);
+            }
+            Self::AddGroup {
+                group,
+                container_identifier,
+            } => visitor.visit_add_group_event(group, container_identifier),
+            Self::UpdateGroup { group } => visitor.visit_update_group_event(group),
+            Self::DeleteGroup { group_identifier } => {
+                visitor.visit_delete_group_event(group_identifier);
+            }
+            Self::AddMemberToGroup { member, group } => {
+                visitor.visit_add_member_to_group_event(member, group);
+            }
+            Self::RemoveMemberFromGroup { member, group } => {
+                visitor.visit_remove_member_from_group_event(member, group);
+            }
+            Self::AddSubgroupToGroup { subgroup, group } => {
+                visitor.visit_add_subgroup_to_group_event(subgroup, group);
+            }
+            Self::RemoveSubgroupFromGroup { subgroup, group } => {
+                visitor.visit_remove_subgroup_from_group_event(subgroup, group);
+            }
+        }
+    }
 }
 
 pub fn contact_store_did_change_notification_name() -> Result<String, ContactsError> {

@@ -17,6 +17,7 @@ fn fetch_request_serializes_predicate_and_descriptor() {
 
 #[test]
 fn generic_fetch_request_preserves_specific_contact_request() {
+    let raw_key = CNContactKey::GivenName.value().unwrap();
     let request = CNContactFetchRequest::new([])
         .with_key_descriptors([
             CNKeyDescriptor::from(CNContactKey::GivenName),
@@ -24,6 +25,7 @@ fn generic_fetch_request_preserves_specific_contact_request() {
             CNKeyDescriptor::from(CNContactFormatter::descriptor_for_required_keys_for_style(
                 CNContactFormatterStyle::FullName,
             )),
+            CNKeyDescriptor::raw(raw_key.clone()),
         ])
         .with_sort_order(CNContactSortOrder::GivenName);
 
@@ -37,6 +39,7 @@ fn generic_fetch_request_preserves_specific_contact_request() {
                     CNContactFormatterStyle::FullName,
                 ),
             ),
+            CNKeyDescriptor::raw(raw_key),
         ],
     );
 

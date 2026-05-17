@@ -1,6 +1,12 @@
 pub use crate::change_notifications::{
-    contact_store_did_change_notification_name, CNChangeHistoryEvent, CNChangeHistoryFetchRequest,
-    CNFetchResult,
+    contact_store_did_change_notification_name, CNChangeHistoryEvent, CNChangeHistoryEventVisitor,
+    CNChangeHistoryFetchRequest, CNFetchResult,
+};
+pub use crate::constants::{
+    contact_property_not_fetched_exception_name, contacts_error_domain, CNContactRelationLabel,
+    CNContainerKey, CNDateLabel, CNEmailAddressLabel, CNErrorUserInfoKey, CNGroupKey,
+    CNInstantMessageService, CNLabeledValueLabel, CNPhoneNumberLabel, CNSocialProfileService,
+    CNUrlAddressLabel,
 };
 pub use crate::contact::{CNContact, CNContactKey, CNContactSortOrder, CNContactType};
 pub use crate::contact_relation::CNContactRelation;
@@ -18,9 +24,9 @@ pub use crate::mutable_contact::CNMutableContact;
 pub use crate::predicates::{CNContactPredicate, CNContainerPredicate, CNGroupPredicate};
 pub use crate::properties::{
     CNContactProperty, CNDateComponents, CNInstantMessageAddress, CNInstantMessageAddressKey,
-    CNLabeledValue, CNPhoneNumber, CNPostalAddress, CNPostalAddressKey, CNSocialProfile,
-    CNSocialProfileKey,
+    CNLabeledValue, CNMutablePostalAddress, CNPhoneNumber, CNPostalAddress, CNPostalAddressKey,
+    CNSocialProfile, CNSocialProfileKey,
 };
-pub use crate::store::{CNContactStore, CNSaveOperation, CNSaveRequest};
+pub use crate::store::{CNContactStore, CNEntityType, CNSaveOperation, CNSaveRequest};
 pub use crate::user_defaults::CNContactsUserDefaults;
 pub use crate::vcard_serialization::CNContactVCardSerialization;

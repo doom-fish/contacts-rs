@@ -97,6 +97,66 @@ impl CNPostalAddress {
     }
 }
 
+/// Mutable Rust representation of `CNMutablePostalAddress`.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct CNMutablePostalAddress {
+    pub street: String,
+    pub sub_locality: String,
+    pub city: String,
+    pub sub_administrative_area: String,
+    pub state: String,
+    pub postal_code: String,
+    pub country: String,
+    pub iso_country_code: String,
+}
+
+impl CNMutablePostalAddress {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn with_street(mut self, value: impl Into<String>) -> Self {
+        self.street = value.into();
+        self
+    }
+
+    pub fn with_sub_locality(mut self, value: impl Into<String>) -> Self {
+        self.sub_locality = value.into();
+        self
+    }
+
+    pub fn with_city(mut self, value: impl Into<String>) -> Self {
+        self.city = value.into();
+        self
+    }
+
+    pub fn with_sub_administrative_area(mut self, value: impl Into<String>) -> Self {
+        self.sub_administrative_area = value.into();
+        self
+    }
+
+    pub fn with_state(mut self, value: impl Into<String>) -> Self {
+        self.state = value.into();
+        self
+    }
+
+    pub fn with_postal_code(mut self, value: impl Into<String>) -> Self {
+        self.postal_code = value.into();
+        self
+    }
+
+    pub fn with_country(mut self, value: impl Into<String>) -> Self {
+        self.country = value.into();
+        self
+    }
+
+    pub fn with_iso_country_code(mut self, value: impl Into<String>) -> Self {
+        self.iso_country_code = value.into();
+        self
+    }
+}
+
 /// Corresponds to `CNInstantMessageAddress`.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
@@ -232,6 +292,36 @@ impl CNPostalAddress {
             })
         } else {
             unsafe { take_required_string(value, "CNPostalAddress.localizedString(forKey:)") }
+        }
+    }
+}
+
+impl From<CNPostalAddress> for CNMutablePostalAddress {
+    fn from(value: CNPostalAddress) -> Self {
+        Self {
+            street: value.street,
+            sub_locality: value.sub_locality,
+            city: value.city,
+            sub_administrative_area: value.sub_administrative_area,
+            state: value.state,
+            postal_code: value.postal_code,
+            country: value.country,
+            iso_country_code: value.iso_country_code,
+        }
+    }
+}
+
+impl From<CNMutablePostalAddress> for CNPostalAddress {
+    fn from(value: CNMutablePostalAddress) -> Self {
+        Self {
+            street: value.street,
+            sub_locality: value.sub_locality,
+            city: value.city,
+            sub_administrative_area: value.sub_administrative_area,
+            state: value.state,
+            postal_code: value.postal_code,
+            country: value.country,
+            iso_country_code: value.iso_country_code,
         }
     }
 }

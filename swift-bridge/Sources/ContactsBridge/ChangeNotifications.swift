@@ -10,6 +10,7 @@ struct CNRChangeHistoryFetchRequestPayload: Codable {
   var startingToken: Data?
   var additionalContactKeys: [CNRContactKey]
   var additionalKeyDescriptors: [CNRAdditionalKeyDescriptorPayload]
+  var rawKeyDescriptors: [String]
   var shouldUnifyResults: Bool
   var mutableObjects: Bool
   var includeGroupChanges: Bool
@@ -167,7 +168,8 @@ public func cn_store_fetch_change_history_json(
     request.startingToken = payload.startingToken
     request.additionalContactKeyDescriptors = cnrKeyDescriptors(
       from: payload.additionalContactKeys,
-      extraDescriptors: payload.additionalKeyDescriptors
+      extraDescriptors: payload.additionalKeyDescriptors,
+      rawKeyDescriptors: payload.rawKeyDescriptors
     )
     request.shouldUnifyResults = payload.shouldUnifyResults
     request.mutableObjects = payload.mutableObjects
@@ -178,7 +180,8 @@ public func cn_store_fetch_change_history_json(
 
     let requestedKeys = cnrResolvedContactKeys(
       contactKeys: payload.additionalContactKeys,
-      extraDescriptors: payload.additionalKeyDescriptors
+      extraDescriptors: payload.additionalKeyDescriptors,
+      rawKeyDescriptors: payload.rawKeyDescriptors
     )
     let contactStore = cnrBorrow(store, as: CNContactStore.self)
     let selector = NSSelectorFromString("enumeratorForChangeHistoryFetchRequest:error:")

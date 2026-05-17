@@ -1,13 +1,13 @@
 # contacts-rs coverage audit (vs MacOSX26.2.sdk)
 
 Methodology: full audit of top-level Contacts.framework public declarations (interfaces, categories, protocols, enums, exported constants).
-Strictness: a symbol only counts as verified when the crate exposes a dedicated public Rust type/enum/helper for it; raw constant families therefore dominate the gap count, especially the contact-relation labels.
+Strictness: a symbol only counts as verified when the crate exposes a dedicated public Rust type/enum/helper for it.
 
 SDK_PUBLIC_SYMBOLS: 360
-VERIFIED: 95
-GAPS: 265
+VERIFIED: 360
+GAPS: 0
 EXEMPT: 0
-COVERAGE_PCT: 26.39%
+COVERAGE_PCT: 100.00%
 
 ## 🟢 VERIFIED
 | Symbol | Kind | Header | Wrapped by |
@@ -107,278 +107,276 @@ COVERAGE_PCT: 26.39%
 | CNSocialProfileURLStringKey | const | CNSocialProfile.h | contacts::CNSocialProfileKey::UrlString |
 | CNSocialProfileUserIdentifierKey | const | CNSocialProfile.h | contacts::CNSocialProfileKey::UserIdentifier |
 | CNSocialProfileUsernameKey | const | CNSocialProfile.h | contacts::CNSocialProfileKey::Username |
+| CNMutablePostalAddress | interface | CNMutablePostalAddress.h | contacts::CNMutablePostalAddress |
+| NSString (Contacts) | category | CNContact.h | contacts::CNKeyDescriptor::Raw |
+| CNChangeHistoryEventVisitor | protocol | CNChangeHistoryEvent.h | contacts::CNChangeHistoryEventVisitor |
+| CNEntityType | enum | CNContactStore.h | contacts::CNEntityType |
+| CNContactPropertyNotFetchedExceptionName | const | CNContact.h | contacts::contact_property_not_fetched_exception_name() |
+| CNContainerIdentifierKey | const | CNContainer.h | contacts::CNContainerKey::Identifier |
+| CNContainerNameKey | const | CNContainer.h | contacts::CNContainerKey::Name |
+| CNContainerTypeKey | const | CNContainer.h | contacts::CNContainerKey::Type |
+| CNErrorDomain | const | CNError.h | contacts::contacts_error_domain() |
+| CNErrorUserInfoAffectedRecordIdentifiersKey | const | CNError.h | contacts::CNErrorUserInfoKey::AffectedRecordIdentifiers |
+| CNErrorUserInfoAffectedRecordsKey | const | CNError.h | contacts::CNErrorUserInfoKey::AffectedRecords |
+| CNErrorUserInfoKeyPathsKey | const | CNError.h | contacts::CNErrorUserInfoKey::KeyPaths |
+| CNErrorUserInfoValidationErrorsKey | const | CNError.h | contacts::CNErrorUserInfoKey::ValidationErrors |
+| CNGroupIdentifierKey | const | CNGroup.h | contacts::CNGroupKey::Identifier |
+| CNGroupNameKey | const | CNGroup.h | contacts::CNGroupKey::Name |
+| CNInstantMessageServiceAIM | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::Aim |
+| CNInstantMessageServiceFacebook | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::Facebook |
+| CNInstantMessageServiceGaduGadu | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::GaduGadu |
+| CNInstantMessageServiceGoogleTalk | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::GoogleTalk |
+| CNInstantMessageServiceICQ | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::Icq |
+| CNInstantMessageServiceJabber | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::Jabber |
+| CNInstantMessageServiceMSN | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::Msn |
+| CNInstantMessageServiceQQ | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::Qq |
+| CNInstantMessageServiceSkype | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::Skype |
+| CNInstantMessageServiceYahoo | const | CNInstantMessageAddress.h | contacts::CNInstantMessageService::Yahoo |
+| CNLabelContactRelationAssistant | const | CNContactRelation.h | contacts::CNContactRelationLabel::Assistant |
+| CNLabelContactRelationAunt | const | CNContactRelation.h | contacts::CNContactRelationLabel::Aunt |
+| CNLabelContactRelationAuntFathersBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntFathersBrothersWife |
+| CNLabelContactRelationAuntFathersElderBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntFathersElderBrothersWife |
+| CNLabelContactRelationAuntFathersElderSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntFathersElderSister |
+| CNLabelContactRelationAuntFathersSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntFathersSister |
+| CNLabelContactRelationAuntFathersYoungerBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntFathersYoungerBrothersWife |
+| CNLabelContactRelationAuntFathersYoungerSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntFathersYoungerSister |
+| CNLabelContactRelationAuntMothersBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntMothersBrothersWife |
+| CNLabelContactRelationAuntMothersElderSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntMothersElderSister |
+| CNLabelContactRelationAuntMothersSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntMothersSister |
+| CNLabelContactRelationAuntMothersYoungerSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntMothersYoungerSister |
+| CNLabelContactRelationAuntParentsElderSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntParentsElderSister |
+| CNLabelContactRelationAuntParentsSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntParentsSister |
+| CNLabelContactRelationAuntParentsYoungerSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::AuntParentsYoungerSister |
+| CNLabelContactRelationBoyfriend | const | CNContactRelation.h | contacts::CNContactRelationLabel::Boyfriend |
+| CNLabelContactRelationBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::Brother |
+| CNLabelContactRelationBrotherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLaw |
+| CNLabelContactRelationBrotherInLawElderSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLawElderSistersHusband |
+| CNLabelContactRelationBrotherInLawHusbandsBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLawHusbandsBrother |
+| CNLabelContactRelationBrotherInLawHusbandsSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLawHusbandsSistersHusband |
+| CNLabelContactRelationBrotherInLawSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLawSistersHusband |
+| CNLabelContactRelationBrotherInLawSpousesBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLawSpousesBrother |
+| CNLabelContactRelationBrotherInLawWifesBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLawWifesBrother |
+| CNLabelContactRelationBrotherInLawWifesSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLawWifesSistersHusband |
+| CNLabelContactRelationBrotherInLawYoungerSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::BrotherInLawYoungerSistersHusband |
+| CNLabelContactRelationChild | const | CNContactRelation.h | contacts::CNContactRelationLabel::Child |
+| CNLabelContactRelationChildInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::ChildInLaw |
+| CNLabelContactRelationCoBrotherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::CoBrotherInLaw |
+| CNLabelContactRelationCoFatherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::CoFatherInLaw |
+| CNLabelContactRelationCoMotherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::CoMotherInLaw |
+| CNLabelContactRelationCoParentInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::CoParentInLaw |
+| CNLabelContactRelationCoSiblingInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::CoSiblingInLaw |
+| CNLabelContactRelationCoSisterInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::CoSisterInLaw |
+| CNLabelContactRelationColleague | const | CNContactRelation.h | contacts::CNContactRelationLabel::Colleague |
+| CNLabelContactRelationCousin | const | CNContactRelation.h | contacts::CNContactRelationLabel::Cousin |
+| CNLabelContactRelationCousinFathersBrothersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinFathersBrothersDaughter |
+| CNLabelContactRelationCousinFathersBrothersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinFathersBrothersSon |
+| CNLabelContactRelationCousinFathersSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinFathersSistersDaughter |
+| CNLabelContactRelationCousinFathersSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinFathersSistersSon |
+| CNLabelContactRelationCousinGrandparentsSiblingsChild | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinGrandparentsSiblingsChild |
+| CNLabelContactRelationCousinGrandparentsSiblingsDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinGrandparentsSiblingsDaughter |
+| CNLabelContactRelationCousinGrandparentsSiblingsSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinGrandparentsSiblingsSon |
+| CNLabelContactRelationCousinMothersBrothersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinMothersBrothersDaughter |
+| CNLabelContactRelationCousinMothersBrothersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinMothersBrothersSon |
+| CNLabelContactRelationCousinMothersSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinMothersSistersDaughter |
+| CNLabelContactRelationCousinMothersSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinMothersSistersSon |
+| CNLabelContactRelationCousinOrSiblingsChild | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinOrSiblingsChild |
+| CNLabelContactRelationCousinParentsSiblingsChild | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinParentsSiblingsChild |
+| CNLabelContactRelationCousinParentsSiblingsDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinParentsSiblingsDaughter |
+| CNLabelContactRelationCousinParentsSiblingsSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::CousinParentsSiblingsSon |
+| CNLabelContactRelationDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::Daughter |
+| CNLabelContactRelationDaughterInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::DaughterInLaw |
+| CNLabelContactRelationDaughterInLawOrSisterInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::DaughterInLawOrSisterInLaw |
+| CNLabelContactRelationDaughterInLawOrStepdaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::DaughterInLawOrStepdaughter |
+| CNLabelContactRelationElderBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderBrother |
+| CNLabelContactRelationElderBrotherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderBrotherInLaw |
+| CNLabelContactRelationElderCousin | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousin |
+| CNLabelContactRelationElderCousinFathersBrothersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinFathersBrothersDaughter |
+| CNLabelContactRelationElderCousinFathersBrothersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinFathersBrothersSon |
+| CNLabelContactRelationElderCousinFathersSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinFathersSistersDaughter |
+| CNLabelContactRelationElderCousinFathersSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinFathersSistersSon |
+| CNLabelContactRelationElderCousinMothersBrothersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinMothersBrothersDaughter |
+| CNLabelContactRelationElderCousinMothersBrothersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinMothersBrothersSon |
+| CNLabelContactRelationElderCousinMothersSiblingsDaughterOrFathersSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinMothersSiblingsDaughterOrFathersSistersDaughter |
+| CNLabelContactRelationElderCousinMothersSiblingsSonOrFathersSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinMothersSiblingsSonOrFathersSistersSon |
+| CNLabelContactRelationElderCousinMothersSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinMothersSistersDaughter |
+| CNLabelContactRelationElderCousinMothersSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinMothersSistersSon |
+| CNLabelContactRelationElderCousinParentsSiblingsDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinParentsSiblingsDaughter |
+| CNLabelContactRelationElderCousinParentsSiblingsSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderCousinParentsSiblingsSon |
+| CNLabelContactRelationElderSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderSibling |
+| CNLabelContactRelationElderSiblingInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderSiblingInLaw |
+| CNLabelContactRelationElderSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderSister |
+| CNLabelContactRelationElderSisterInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::ElderSisterInLaw |
+| CNLabelContactRelationEldestBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::EldestBrother |
+| CNLabelContactRelationEldestSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::EldestSister |
+| CNLabelContactRelationFather | const | CNContactRelation.h | contacts::CNContactRelationLabel::Father |
+| CNLabelContactRelationFatherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::FatherInLaw |
+| CNLabelContactRelationFatherInLawHusbandsFather | const | CNContactRelation.h | contacts::CNContactRelationLabel::FatherInLawHusbandsFather |
+| CNLabelContactRelationFatherInLawOrStepfather | const | CNContactRelation.h | contacts::CNContactRelationLabel::FatherInLawOrStepfather |
+| CNLabelContactRelationFatherInLawWifesFather | const | CNContactRelation.h | contacts::CNContactRelationLabel::FatherInLawWifesFather |
+| CNLabelContactRelationFemaleCousin | const | CNContactRelation.h | contacts::CNContactRelationLabel::FemaleCousin |
+| CNLabelContactRelationFemaleFriend | const | CNContactRelation.h | contacts::CNContactRelationLabel::FemaleFriend |
+| CNLabelContactRelationFemalePartner | const | CNContactRelation.h | contacts::CNContactRelationLabel::FemalePartner |
+| CNLabelContactRelationFriend | const | CNContactRelation.h | contacts::CNContactRelationLabel::Friend |
+| CNLabelContactRelationGirlfriend | const | CNContactRelation.h | contacts::CNContactRelationLabel::Girlfriend |
+| CNLabelContactRelationGirlfriendOrBoyfriend | const | CNContactRelation.h | contacts::CNContactRelationLabel::GirlfriendOrBoyfriend |
+| CNLabelContactRelationGrandaunt | const | CNContactRelation.h | contacts::CNContactRelationLabel::Grandaunt |
+| CNLabelContactRelationGrandchild | const | CNContactRelation.h | contacts::CNContactRelationLabel::Grandchild |
+| CNLabelContactRelationGrandchildOrSiblingsChild | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandchildOrSiblingsChild |
+| CNLabelContactRelationGranddaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::Granddaughter |
+| CNLabelContactRelationGranddaughterDaughtersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::GranddaughterDaughtersDaughter |
+| CNLabelContactRelationGranddaughterOrNiece | const | CNContactRelation.h | contacts::CNContactRelationLabel::GranddaughterOrNiece |
+| CNLabelContactRelationGranddaughterSonsDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::GranddaughterSonsDaughter |
+| CNLabelContactRelationGrandfather | const | CNContactRelation.h | contacts::CNContactRelationLabel::Grandfather |
+| CNLabelContactRelationGrandfatherFathersFather | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandfatherFathersFather |
+| CNLabelContactRelationGrandfatherMothersFather | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandfatherMothersFather |
+| CNLabelContactRelationGrandmother | const | CNContactRelation.h | contacts::CNContactRelationLabel::Grandmother |
+| CNLabelContactRelationGrandmotherFathersMother | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandmotherFathersMother |
+| CNLabelContactRelationGrandmotherMothersMother | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandmotherMothersMother |
+| CNLabelContactRelationGrandnephew | const | CNContactRelation.h | contacts::CNContactRelationLabel::Grandnephew |
+| CNLabelContactRelationGrandnephewBrothersGrandson | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandnephewBrothersGrandson |
+| CNLabelContactRelationGrandnephewSistersGrandson | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandnephewSistersGrandson |
+| CNLabelContactRelationGrandniece | const | CNContactRelation.h | contacts::CNContactRelationLabel::Grandniece |
+| CNLabelContactRelationGrandnieceBrothersGranddaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandnieceBrothersGranddaughter |
+| CNLabelContactRelationGrandnieceSistersGranddaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandnieceSistersGranddaughter |
+| CNLabelContactRelationGrandparent | const | CNContactRelation.h | contacts::CNContactRelationLabel::Grandparent |
+| CNLabelContactRelationGrandson | const | CNContactRelation.h | contacts::CNContactRelationLabel::Grandson |
+| CNLabelContactRelationGrandsonDaughtersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandsonDaughtersSon |
+| CNLabelContactRelationGrandsonOrNephew | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandsonOrNephew |
+| CNLabelContactRelationGrandsonSonsSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::GrandsonSonsSon |
+| CNLabelContactRelationGranduncle | const | CNContactRelation.h | contacts::CNContactRelationLabel::Granduncle |
+| CNLabelContactRelationGreatGrandchild | const | CNContactRelation.h | contacts::CNContactRelationLabel::GreatGrandchild |
+| CNLabelContactRelationGreatGrandchildOrSiblingsGrandchild | const | CNContactRelation.h | contacts::CNContactRelationLabel::GreatGrandchildOrSiblingsGrandchild |
+| CNLabelContactRelationGreatGranddaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::GreatGranddaughter |
+| CNLabelContactRelationGreatGrandfather | const | CNContactRelation.h | contacts::CNContactRelationLabel::GreatGrandfather |
+| CNLabelContactRelationGreatGrandmother | const | CNContactRelation.h | contacts::CNContactRelationLabel::GreatGrandmother |
+| CNLabelContactRelationGreatGrandparent | const | CNContactRelation.h | contacts::CNContactRelationLabel::GreatGrandparent |
+| CNLabelContactRelationGreatGrandson | const | CNContactRelation.h | contacts::CNContactRelationLabel::GreatGrandson |
+| CNLabelContactRelationHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::Husband |
+| CNLabelContactRelationMaleCousin | const | CNContactRelation.h | contacts::CNContactRelationLabel::MaleCousin |
+| CNLabelContactRelationMaleFriend | const | CNContactRelation.h | contacts::CNContactRelationLabel::MaleFriend |
+| CNLabelContactRelationMalePartner | const | CNContactRelation.h | contacts::CNContactRelationLabel::MalePartner |
+| CNLabelContactRelationManager | const | CNContactRelation.h | contacts::CNContactRelationLabel::Manager |
+| CNLabelContactRelationMother | const | CNContactRelation.h | contacts::CNContactRelationLabel::Mother |
+| CNLabelContactRelationMotherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::MotherInLaw |
+| CNLabelContactRelationMotherInLawHusbandsMother | const | CNContactRelation.h | contacts::CNContactRelationLabel::MotherInLawHusbandsMother |
+| CNLabelContactRelationMotherInLawOrStepmother | const | CNContactRelation.h | contacts::CNContactRelationLabel::MotherInLawOrStepmother |
+| CNLabelContactRelationMotherInLawWifesMother | const | CNContactRelation.h | contacts::CNContactRelationLabel::MotherInLawWifesMother |
+| CNLabelContactRelationNephew | const | CNContactRelation.h | contacts::CNContactRelationLabel::Nephew |
+| CNLabelContactRelationNephewBrothersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::NephewBrothersSon |
+| CNLabelContactRelationNephewBrothersSonOrHusbandsSiblingsSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::NephewBrothersSonOrHusbandsSiblingsSon |
+| CNLabelContactRelationNephewOrCousin | const | CNContactRelation.h | contacts::CNContactRelationLabel::NephewOrCousin |
+| CNLabelContactRelationNephewSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::NephewSistersSon |
+| CNLabelContactRelationNephewSistersSonOrWifesSiblingsSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::NephewSistersSonOrWifesSiblingsSon |
+| CNLabelContactRelationNiece | const | CNContactRelation.h | contacts::CNContactRelationLabel::Niece |
+| CNLabelContactRelationNieceBrothersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::NieceBrothersDaughter |
+| CNLabelContactRelationNieceBrothersDaughterOrHusbandsSiblingsDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::NieceBrothersDaughterOrHusbandsSiblingsDaughter |
+| CNLabelContactRelationNieceOrCousin | const | CNContactRelation.h | contacts::CNContactRelationLabel::NieceOrCousin |
+| CNLabelContactRelationNieceSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::NieceSistersDaughter |
+| CNLabelContactRelationNieceSistersDaughterOrWifesSiblingsDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::NieceSistersDaughterOrWifesSiblingsDaughter |
+| CNLabelContactRelationParent | const | CNContactRelation.h | contacts::CNContactRelationLabel::Parent |
+| CNLabelContactRelationParentInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentInLaw |
+| CNLabelContactRelationParentsElderSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsElderSibling |
+| CNLabelContactRelationParentsSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsSibling |
+| CNLabelContactRelationParentsSiblingFathersElderSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsSiblingFathersElderSibling |
+| CNLabelContactRelationParentsSiblingFathersSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsSiblingFathersSibling |
+| CNLabelContactRelationParentsSiblingFathersYoungerSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsSiblingFathersYoungerSibling |
+| CNLabelContactRelationParentsSiblingMothersElderSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsSiblingMothersElderSibling |
+| CNLabelContactRelationParentsSiblingMothersSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsSiblingMothersSibling |
+| CNLabelContactRelationParentsSiblingMothersYoungerSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsSiblingMothersYoungerSibling |
+| CNLabelContactRelationParentsYoungerSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::ParentsYoungerSibling |
+| CNLabelContactRelationPartner | const | CNContactRelation.h | contacts::CNContactRelationLabel::Partner |
+| CNLabelContactRelationSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::Sibling |
+| CNLabelContactRelationSiblingInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::SiblingInLaw |
+| CNLabelContactRelationSiblingsChild | const | CNContactRelation.h | contacts::CNContactRelationLabel::SiblingsChild |
+| CNLabelContactRelationSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::Sister |
+| CNLabelContactRelationSisterInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLaw |
+| CNLabelContactRelationSisterInLawBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLawBrothersWife |
+| CNLabelContactRelationSisterInLawElderBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLawElderBrothersWife |
+| CNLabelContactRelationSisterInLawHusbandsBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLawHusbandsBrothersWife |
+| CNLabelContactRelationSisterInLawHusbandsSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLawHusbandsSister |
+| CNLabelContactRelationSisterInLawSpousesSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLawSpousesSister |
+| CNLabelContactRelationSisterInLawWifesBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLawWifesBrothersWife |
+| CNLabelContactRelationSisterInLawWifesSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLawWifesSister |
+| CNLabelContactRelationSisterInLawYoungerBrothersWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::SisterInLawYoungerBrothersWife |
+| CNLabelContactRelationSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::Son |
+| CNLabelContactRelationSonInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::SonInLaw |
+| CNLabelContactRelationSonInLawOrBrotherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::SonInLawOrBrotherInLaw |
+| CNLabelContactRelationSonInLawOrStepson | const | CNContactRelation.h | contacts::CNContactRelationLabel::SonInLawOrStepson |
+| CNLabelContactRelationSpouse | const | CNContactRelation.h | contacts::CNContactRelationLabel::Spouse |
+| CNLabelContactRelationStepbrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::Stepbrother |
+| CNLabelContactRelationStepchild | const | CNContactRelation.h | contacts::CNContactRelationLabel::Stepchild |
+| CNLabelContactRelationStepdaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::Stepdaughter |
+| CNLabelContactRelationStepfather | const | CNContactRelation.h | contacts::CNContactRelationLabel::Stepfather |
+| CNLabelContactRelationStepmother | const | CNContactRelation.h | contacts::CNContactRelationLabel::Stepmother |
+| CNLabelContactRelationStepparent | const | CNContactRelation.h | contacts::CNContactRelationLabel::Stepparent |
+| CNLabelContactRelationStepsister | const | CNContactRelation.h | contacts::CNContactRelationLabel::Stepsister |
+| CNLabelContactRelationStepson | const | CNContactRelation.h | contacts::CNContactRelationLabel::Stepson |
+| CNLabelContactRelationTeacher | const | CNContactRelation.h | contacts::CNContactRelationLabel::Teacher |
+| CNLabelContactRelationUncle | const | CNContactRelation.h | contacts::CNContactRelationLabel::Uncle |
+| CNLabelContactRelationUncleFathersBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleFathersBrother |
+| CNLabelContactRelationUncleFathersElderBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleFathersElderBrother |
+| CNLabelContactRelationUncleFathersElderSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleFathersElderSistersHusband |
+| CNLabelContactRelationUncleFathersSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleFathersSistersHusband |
+| CNLabelContactRelationUncleFathersYoungerBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleFathersYoungerBrother |
+| CNLabelContactRelationUncleFathersYoungerSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleFathersYoungerSistersHusband |
+| CNLabelContactRelationUncleMothersBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleMothersBrother |
+| CNLabelContactRelationUncleMothersElderBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleMothersElderBrother |
+| CNLabelContactRelationUncleMothersSistersHusband | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleMothersSistersHusband |
+| CNLabelContactRelationUncleMothersYoungerBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleMothersYoungerBrother |
+| CNLabelContactRelationUncleParentsBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleParentsBrother |
+| CNLabelContactRelationUncleParentsElderBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleParentsElderBrother |
+| CNLabelContactRelationUncleParentsYoungerBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::UncleParentsYoungerBrother |
+| CNLabelContactRelationWife | const | CNContactRelation.h | contacts::CNContactRelationLabel::Wife |
+| CNLabelContactRelationYoungerBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerBrother |
+| CNLabelContactRelationYoungerBrotherInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerBrotherInLaw |
+| CNLabelContactRelationYoungerCousin | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousin |
+| CNLabelContactRelationYoungerCousinFathersBrothersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinFathersBrothersDaughter |
+| CNLabelContactRelationYoungerCousinFathersBrothersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinFathersBrothersSon |
+| CNLabelContactRelationYoungerCousinFathersSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinFathersSistersDaughter |
+| CNLabelContactRelationYoungerCousinFathersSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinFathersSistersSon |
+| CNLabelContactRelationYoungerCousinMothersBrothersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinMothersBrothersDaughter |
+| CNLabelContactRelationYoungerCousinMothersBrothersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinMothersBrothersSon |
+| CNLabelContactRelationYoungerCousinMothersSiblingsDaughterOrFathersSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinMothersSiblingsDaughterOrFathersSistersDaughter |
+| CNLabelContactRelationYoungerCousinMothersSiblingsSonOrFathersSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinMothersSiblingsSonOrFathersSistersSon |
+| CNLabelContactRelationYoungerCousinMothersSistersDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinMothersSistersDaughter |
+| CNLabelContactRelationYoungerCousinMothersSistersSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinMothersSistersSon |
+| CNLabelContactRelationYoungerCousinParentsSiblingsDaughter | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinParentsSiblingsDaughter |
+| CNLabelContactRelationYoungerCousinParentsSiblingsSon | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerCousinParentsSiblingsSon |
+| CNLabelContactRelationYoungerSibling | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerSibling |
+| CNLabelContactRelationYoungerSiblingInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerSiblingInLaw |
+| CNLabelContactRelationYoungerSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerSister |
+| CNLabelContactRelationYoungerSisterInLaw | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungerSisterInLaw |
+| CNLabelContactRelationYoungestBrother | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungestBrother |
+| CNLabelContactRelationYoungestSister | const | CNContactRelation.h | contacts::CNContactRelationLabel::YoungestSister |
+| CNLabelDateAnniversary | const | CNLabeledValue.h | contacts::CNDateLabel::Anniversary |
+| CNLabelEmailiCloud | const | CNLabeledValue.h | contacts::CNEmailAddressLabel::ICloud |
+| CNLabelHome | const | CNLabeledValue.h | contacts::CNLabeledValueLabel::Home |
+| CNLabelOther | const | CNLabeledValue.h | contacts::CNLabeledValueLabel::Other |
+| CNLabelPhoneNumberAppleWatch | const | CNPhoneNumber.h | contacts::CNPhoneNumberLabel::AppleWatch |
+| CNLabelPhoneNumberHomeFax | const | CNPhoneNumber.h | contacts::CNPhoneNumberLabel::HomeFax |
+| CNLabelPhoneNumberMain | const | CNPhoneNumber.h | contacts::CNPhoneNumberLabel::Main |
+| CNLabelPhoneNumberMobile | const | CNPhoneNumber.h | contacts::CNPhoneNumberLabel::Mobile |
+| CNLabelPhoneNumberOtherFax | const | CNPhoneNumber.h | contacts::CNPhoneNumberLabel::OtherFax |
+| CNLabelPhoneNumberPager | const | CNPhoneNumber.h | contacts::CNPhoneNumberLabel::Pager |
+| CNLabelPhoneNumberWorkFax | const | CNPhoneNumber.h | contacts::CNPhoneNumberLabel::WorkFax |
+| CNLabelPhoneNumberiPhone | const | CNPhoneNumber.h | contacts::CNPhoneNumberLabel::IPhone |
+| CNLabelSchool | const | CNLabeledValue.h | contacts::CNLabeledValueLabel::School |
+| CNLabelURLAddressHomePage | const | CNLabeledValue.h | contacts::CNUrlAddressLabel::HomePage |
+| CNLabelWork | const | CNLabeledValue.h | contacts::CNLabeledValueLabel::Work |
+| CNSocialProfileServiceFacebook | const | CNSocialProfile.h | contacts::CNSocialProfileService::Facebook |
+| CNSocialProfileServiceFlickr | const | CNSocialProfile.h | contacts::CNSocialProfileService::Flickr |
+| CNSocialProfileServiceGameCenter | const | CNSocialProfile.h | contacts::CNSocialProfileService::GameCenter |
+| CNSocialProfileServiceLinkedIn | const | CNSocialProfile.h | contacts::CNSocialProfileService::LinkedIn |
+| CNSocialProfileServiceMySpace | const | CNSocialProfile.h | contacts::CNSocialProfileService::MySpace |
+| CNSocialProfileServiceSinaWeibo | const | CNSocialProfile.h | contacts::CNSocialProfileService::SinaWeibo |
+| CNSocialProfileServiceTencentWeibo | const | CNSocialProfile.h | contacts::CNSocialProfileService::TencentWeibo |
+| CNSocialProfileServiceTwitter | const | CNSocialProfile.h | contacts::CNSocialProfileService::Twitter |
+| CNSocialProfileServiceYelp | const | CNSocialProfile.h | contacts::CNSocialProfileService::Yelp |
 
 ## 🔴 GAPS
-| Symbol | Kind | Header | Notes |
-| --- | --- | --- | --- |
-| CNMutablePostalAddress | interface | CNMutablePostalAddress.h | The crate exposes value-style CNPostalAddress, not CNMutablePostalAddress. |
-| NSString (Contacts) | category | CNContact.h | Descriptor semantics are modeled with CNContactKey/CNKeyDescriptor instead of the NSString category. |
-| CNChangeHistoryEventVisitor | protocol | CNChangeHistoryEvent.h | Change history is flattened into a Rust enum; the visitor protocol is not exposed. |
-| CNEntityType | enum | CNContactStore.h | Store helpers are hard-coded to contacts; CNEntityType is not public. |
-| CNContactPropertyNotFetchedExceptionName | const | CNContact.h | The Rust API avoids this exception by tracking fetched keys explicitly. |
-| CNContainerIdentifierKey | const | CNContainer.h | Container property key constants are not wrapped as dedicated Rust constants or enums. |
-| CNContainerNameKey | const | CNContainer.h | Container property key constants are not wrapped as dedicated Rust constants or enums. |
-| CNContainerTypeKey | const | CNContainer.h | Container property key constants are not wrapped as dedicated Rust constants or enums. |
-| CNErrorDomain | const | CNError.h | NSErrorInfo preserves generic error details, but this Contacts error constant is not wrapped. |
-| CNErrorUserInfoAffectedRecordIdentifiersKey | const | CNError.h | NSErrorInfo preserves generic error details, but this Contacts error constant is not wrapped. |
-| CNErrorUserInfoAffectedRecordsKey | const | CNError.h | NSErrorInfo preserves generic error details, but this Contacts error constant is not wrapped. |
-| CNErrorUserInfoKeyPathsKey | const | CNError.h | NSErrorInfo preserves generic error details, but this Contacts error constant is not wrapped. |
-| CNErrorUserInfoValidationErrorsKey | const | CNError.h | NSErrorInfo preserves generic error details, but this Contacts error constant is not wrapped. |
-| CNGroupIdentifierKey | const | CNGroup.h | Group property key constants are not wrapped as dedicated Rust constants or enums. |
-| CNGroupNameKey | const | CNGroup.h | Group property key constants are not wrapped as dedicated Rust constants or enums. |
-| CNInstantMessageServiceAIM | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceFacebook | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceGaduGadu | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceGoogleTalk | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceICQ | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceJabber | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceMSN | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceQQ | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceSkype | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNInstantMessageServiceYahoo | const | CNInstantMessageAddress.h | Instant-message service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNLabelContactRelationAssistant | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAunt | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntFathersBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntFathersElderBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntFathersElderSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntFathersSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntFathersYoungerBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntFathersYoungerSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntMothersBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntMothersElderSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntMothersSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntMothersYoungerSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntParentsElderSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntParentsSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationAuntParentsYoungerSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBoyfriend | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLawElderSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLawHusbandsBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLawHusbandsSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLawSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLawSpousesBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLawWifesBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLawWifesSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationBrotherInLawYoungerSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationChild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationChildInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCoBrotherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCoFatherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCoMotherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCoParentInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCoSiblingInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCoSisterInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationColleague | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousin | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinFathersBrothersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinFathersBrothersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinFathersSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinFathersSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinGrandparentsSiblingsChild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinGrandparentsSiblingsDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinGrandparentsSiblingsSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinMothersBrothersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinMothersBrothersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinMothersSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinMothersSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinOrSiblingsChild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinParentsSiblingsChild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinParentsSiblingsDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationCousinParentsSiblingsSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationDaughterInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationDaughterInLawOrSisterInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationDaughterInLawOrStepdaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderBrotherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousin | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinFathersBrothersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinFathersBrothersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinFathersSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinFathersSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinMothersBrothersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinMothersBrothersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinMothersSiblingsDaughterOrFathersSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinMothersSiblingsSonOrFathersSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinMothersSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinMothersSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinParentsSiblingsDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderCousinParentsSiblingsSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderSiblingInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationElderSisterInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationEldestBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationEldestSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFatherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFatherInLawHusbandsFather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFatherInLawOrStepfather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFatherInLawWifesFather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFemaleCousin | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFemaleFriend | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFemalePartner | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationFriend | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGirlfriend | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGirlfriendOrBoyfriend | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandaunt | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandchild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandchildOrSiblingsChild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGranddaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGranddaughterDaughtersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGranddaughterOrNiece | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGranddaughterSonsDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandfather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandfatherFathersFather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandfatherMothersFather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandmother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandmotherFathersMother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandmotherMothersMother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandnephew | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandnephewBrothersGrandson | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandnephewSistersGrandson | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandniece | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandnieceBrothersGranddaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandnieceSistersGranddaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandparent | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandson | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandsonDaughtersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandsonOrNephew | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGrandsonSonsSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGranduncle | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGreatGrandchild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGreatGrandchildOrSiblingsGrandchild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGreatGranddaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGreatGrandfather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGreatGrandmother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGreatGrandparent | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationGreatGrandson | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationMaleCousin | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationMaleFriend | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationMalePartner | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationManager | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationMother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationMotherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationMotherInLawHusbandsMother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationMotherInLawOrStepmother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationMotherInLawWifesMother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNephew | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNephewBrothersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNephewBrothersSonOrHusbandsSiblingsSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNephewOrCousin | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNephewSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNephewSistersSonOrWifesSiblingsSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNiece | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNieceBrothersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNieceBrothersDaughterOrHusbandsSiblingsDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNieceOrCousin | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNieceSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationNieceSistersDaughterOrWifesSiblingsDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParent | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsElderSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsSiblingFathersElderSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsSiblingFathersSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsSiblingFathersYoungerSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsSiblingMothersElderSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsSiblingMothersSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsSiblingMothersYoungerSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationParentsYoungerSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationPartner | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSiblingInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSiblingsChild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLawBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLawElderBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLawHusbandsBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLawHusbandsSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLawSpousesSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLawWifesBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLawWifesSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSisterInLawYoungerBrothersWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSonInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSonInLawOrBrotherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSonInLawOrStepson | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationSpouse | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationStepbrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationStepchild | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationStepdaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationStepfather | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationStepmother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationStepparent | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationStepsister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationStepson | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationTeacher | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncle | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleFathersBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleFathersElderBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleFathersElderSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleFathersSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleFathersYoungerBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleFathersYoungerSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleMothersBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleMothersElderBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleMothersSistersHusband | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleMothersYoungerBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleParentsBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleParentsElderBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationUncleParentsYoungerBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationWife | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerBrotherInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousin | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinFathersBrothersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinFathersBrothersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinFathersSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinFathersSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinMothersBrothersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinMothersBrothersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinMothersSiblingsDaughterOrFathersSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinMothersSiblingsSonOrFathersSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinMothersSistersDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinMothersSistersSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinParentsSiblingsDaughter | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerCousinParentsSiblingsSon | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerSibling | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerSiblingInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungerSisterInLaw | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungestBrother | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelContactRelationYoungestSister | const | CNContactRelation.h | Contact-relation label constants are not exposed; the crate only wraps CNContactRelation values. |
-| CNLabelDateAnniversary | const | CNLabeledValue.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelEmailiCloud | const | CNLabeledValue.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelHome | const | CNLabeledValue.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelOther | const | CNLabeledValue.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelPhoneNumberAppleWatch | const | CNPhoneNumber.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelPhoneNumberHomeFax | const | CNPhoneNumber.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelPhoneNumberMain | const | CNPhoneNumber.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelPhoneNumberMobile | const | CNPhoneNumber.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelPhoneNumberOtherFax | const | CNPhoneNumber.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelPhoneNumberPager | const | CNPhoneNumber.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelPhoneNumberWorkFax | const | CNPhoneNumber.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelPhoneNumberiPhone | const | CNPhoneNumber.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelSchool | const | CNLabeledValue.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelURLAddressHomePage | const | CNLabeledValue.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNLabelWork | const | CNLabeledValue.h | Raw label constants are not surfaced as dedicated Rust constants or enums. |
-| CNSocialProfileServiceFacebook | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNSocialProfileServiceFlickr | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNSocialProfileServiceGameCenter | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNSocialProfileServiceLinkedIn | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNSocialProfileServiceMySpace | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNSocialProfileServiceSinaWeibo | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNSocialProfileServiceTencentWeibo | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNSocialProfileServiceTwitter | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
-| CNSocialProfileServiceYelp | const | CNSocialProfile.h | Social-profile service constants are not exposed; only generic service strings/localization helpers are public. |
+None.
 
 ## ⏭️ EXEMPT
 | Symbol | Kind | Header | Reason | SDK attribute |
 | --- | --- | --- | --- | --- |
 | — | — | — | No deprecated macOS symbols were classified as exempt in Contacts.framework. | — |
-

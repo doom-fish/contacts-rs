@@ -26,6 +26,9 @@ pub enum CNKeyDescriptor {
     Additional {
         descriptor: CNAdditionalKeyDescriptor,
     },
+    Raw {
+        value: String,
+    },
 }
 
 impl CNKeyDescriptor {
@@ -35,6 +38,12 @@ impl CNKeyDescriptor {
 
     pub const fn additional(descriptor: CNAdditionalKeyDescriptor) -> Self {
         Self::Additional { descriptor }
+    }
+
+    pub fn raw(value: impl Into<String>) -> Self {
+        Self::Raw {
+            value: value.into(),
+        }
     }
 }
 
@@ -58,6 +67,8 @@ pub struct CNContactFetchRequest {
     #[serde(default)]
     pub extra_descriptors: Vec<CNAdditionalKeyDescriptor>,
     #[serde(default)]
+    pub raw_key_descriptors: Vec<String>,
+    #[serde(default)]
     pub predicate: Option<CNContactPredicate>,
     pub mutable_objects: bool,
     pub unify_results: bool,
@@ -69,6 +80,7 @@ impl CNContactFetchRequest {
         Self {
             keys_to_fetch: keys_to_fetch.into_iter().collect(),
             extra_descriptors: Vec::new(),
+            raw_key_descriptors: Vec::new(),
             predicate: None,
             mutable_objects: false,
             unify_results: true,
@@ -104,6 +116,19 @@ impl CNContactFetchRequest {
         self
     }
 
+    pub fn with_raw_key_descriptor(mut self, descriptor: impl Into<String>) -> Self {
+        self.raw_key_descriptors.push(descriptor.into());
+        self
+    }
+
+    pub fn with_raw_key_descriptors(
+        mut self,
+        descriptors: impl IntoIterator<Item = impl Into<String>>,
+    ) -> Self {
+        self.raw_key_descriptors = descriptors.into_iter().map(Into::into).collect();
+        self
+    }
+
     pub fn with_predicate(mut self, predicate: CNContactPredicate) -> Self {
         self.predicate = Some(predicate);
         self
@@ -135,6 +160,12 @@ impl CNContactFetchRequest {
                     .cloned()
                     .map(CNKeyDescriptor::from),
             )
+            .chain(
+                self.raw_key_descriptors
+                    .iter()
+                    .cloned()
+                    .map(CNKeyDescriptor::raw),
+            )
             .collect()
     }
 
@@ -142,6 +173,7 @@ impl CNContactFetchRequest {
         match descriptor {
             CNKeyDescriptor::ContactKey { key } => self.keys_to_fetch.push(key),
             CNKeyDescriptor::Additional { descriptor } => self.extra_descriptors.push(descriptor),
+            CNKeyDescriptor::Raw { value } => self.raw_key_descriptors.push(value),
         }
     }
 }

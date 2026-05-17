@@ -31,6 +31,19 @@ struct CNRSaveRequestPayload: Codable {
   var shouldRefetchContacts: Bool
 }
 
+func cnrEntityType(_ rawValue: Int32) throws -> CNEntityType {
+  switch rawValue {
+  case Int32(CNEntityType.contacts.rawValue):
+    return .contacts
+  default:
+    throw NSError(
+      domain: "contacts-rs",
+      code: -1,
+      userInfo: [NSLocalizedDescriptionKey: "unsupported CNEntityType raw value: \(rawValue)"]
+    )
+  }
+}
+
 func cnrFetchMutableContact(store: CNContactStore, identifier: String) throws -> CNMutableContact {
   let contact = try store.unifiedContact(
     withIdentifier: identifier,
@@ -65,7 +78,8 @@ func cnrFetchContacts(
 ) throws -> [CNRContactPayload] {
   let keyDescriptors = cnrKeyDescriptors(
     from: requestPayload.keysToFetch,
-    extraDescriptors: requestPayload.extraDescriptors
+    extraDescriptors: requestPayload.extraDescriptors,
+    rawKeyDescriptors: requestPayload.rawKeyDescriptors
   )
   let request = CNContactFetchRequest(keysToFetch: keyDescriptors)
   request.mutableObjects = requestPayload.mutableObjects
@@ -77,7 +91,8 @@ func cnrFetchContacts(
 
   let requestedKeys = cnrResolvedContactKeys(
     contactKeys: requestPayload.keysToFetch,
-    extraDescriptors: requestPayload.extraDescriptors
+    extraDescriptors: requestPayload.extraDescriptors,
+    rawKeyDescriptors: requestPayload.rawKeyDescriptors
   )
 
   var contacts: [CNRContactPayload] = []
@@ -91,30 +106,42 @@ func cnrFetchContacts(
 }
 
 @_cdecl("cn_authorization_status")
-public func cn_authorization_status() -> Int32 {
-  Int32(CNContactStore.authorizationStatus(for: .contacts).rawValue)
+public func cn_authorization_status(_ entityTypeRawValue: Int32) -> Int32 {
+  do {
+    let entityType = try cnrEntityType(entityTypeRawValue)
+    return Int32(CNContactStore.authorizationStatus(for: entityType).rawValue)
+  } catch {
+    return Int32(CNAuthorizationStatus.denied.rawValue)
+  }
 }
 
 @_cdecl("cn_request_access")
 public func cn_request_access(
+  _ entityTypeRawValue: Int32,
   _ outError: UnsafeMutablePointer<UnsafeMutablePointer<CChar>?>?
 ) -> Bool {
-  let semaphore = DispatchSemaphore(value: 0)
-  let store = CNContactStore()
-  var granted = false
-  var capturedError: Error?
+  do {
+    let entityType = try cnrEntityType(entityTypeRawValue)
+    let semaphore = DispatchSemaphore(value: 0)
+    let store = CNContactStore()
+    var granted = false
+    var capturedError: Error?
 
-  store.requestAccess(for: .contacts) { didGrant, error in
-    granted = didGrant
-    capturedError = error
-    semaphore.signal()
-  }
+    store.requestAccess(for: entityType) { didGrant, error in
+      granted = didGrant
+      capturedError = error
+      semaphore.signal()
+    }
 
-  _ = semaphore.wait(timeout: .now() + .seconds(30))
-  if let capturedError {
-    cnrSetError(outError, capturedError)
+    _ = semaphore.wait(timeout: .now() + .seconds(30))
+    if let capturedError {
+      cnrSetError(outError, capturedError)
+    }
+    return granted
+  } catch {
+    cnrSetError(outError, error)
+    return false
   }
-  return granted
 }
 
 @_cdecl("cn_store_new")

@@ -2,7 +2,7 @@
 
 Safe Rust bindings for Apple's [Contacts](https://developer.apple.com/documentation/contacts) framework on macOS.
 
-> **Status:** v0.2.1 extends the Swift bridge and safe Rust API across Store, UserDefaults, Contact, MutableContact, Group, Container, FetchRequest, FormatAndPrint, ChangeNotifications, Properties, Predicates, VCardSerialization, ContactRelation, and typed Contacts errors.
+> **Status:** v0.2.2 reaches 100% top-level `Contacts.framework` declaration coverage, adding exhaustive constant wrappers plus `CNMutablePostalAddress`, `CNEntityType`, `CNChangeHistoryEventVisitor`, and raw `NSString` key-descriptor support.
 
 ## Quick start
 
@@ -44,13 +44,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Highlights
 
-- `CNContactStore` authorization, fetch, save, container, group, history-token, and `CNContactsUserDefaults` helpers
-- Expanded `CNContact` / `CNMutableContact` coverage for names, phonetics, notes, image data, dates, relations, social profiles, instant-message addresses, and `NSItemProvider` round-tripping
-- `CNMutableGroup`, subgroup/member save operations, and group/container predicate factories
-- `CNContactFetchRequest`, `CNFetchRequest`, and `CNKeyDescriptor` builders for comparator, formatter, vCard, and change-history fetches
+- `CNContactStore` authorization, fetch, save, container, group, history-token, `CNEntityType`, and `CNContactsUserDefaults` helpers
+- Expanded `CNContact` / `CNMutableContact` coverage for names, phonetics, notes, image data, dates, relations, social profiles, instant-message addresses, raw field constants, and `NSItemProvider` round-tripping
+- `CNMutableGroup`, `CNMutablePostalAddress`, subgroup/member save operations, and group/container predicate factories
+- `CNContactFetchRequest`, `CNChangeHistoryFetchRequest`, `CNFetchRequest`, and `CNKeyDescriptor` builders for comparator, formatter, vCard, change-history, and raw `NSString` key descriptors
 - `CNContactFormatter` and `CNPostalAddressFormatter` string / attributed-string helpers
-- `CNChangeHistoryFetchRequest`, `CNFetchResult`, and `CNContactStoreDidChangeNotification` support
-- `CNErrorCode`, `CNLabeledValue`, `CNPhoneNumber`, `CNPostalAddress`, `CNSocialProfile`, `CNInstantMessageAddress`, and `CNContactRelation` value types
+- `CNChangeHistoryFetchRequest`, `CNChangeHistoryEventVisitor`, `CNFetchResult`, and `CNContactStoreDidChangeNotification` support
+- Exhaustive typed wrappers for Contacts keys, labels, services, relation labels, `CNErrorCode`, `CNErrorDomain`, and `CNErrorUserInfo*`
 - `CNContactVCardSerialization` round-tripping between `CNContact` values and vCard bytes
 
 ## Examples
@@ -84,7 +84,7 @@ cargo test
 
 ## Coverage audit
 
-See [COVERAGE.md](COVERAGE.md) for the per-area implementation matrix and the explicitly deferred public APIs.
+See [COVERAGE.md](COVERAGE.md) for the per-area implementation matrix and [COVERAGE_AUDIT.md](COVERAGE_AUDIT.md) for the exhaustive 100% top-level declaration audit.
 
 ## License
 

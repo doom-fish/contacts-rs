@@ -17,6 +17,7 @@ struct CNRAdditionalKeyDescriptorPayload: Codable {
 struct CNRContactFetchRequestPayload: Codable {
   var keysToFetch: [CNRContactKey]
   var extraDescriptors: [CNRAdditionalKeyDescriptorPayload]
+  var rawKeyDescriptors: [String]
   var predicate: CNRContactPredicatePayload?
   var mutableObjects: Bool
   var unifyResults: Bool
@@ -81,7 +82,8 @@ func cnrNativeSortOrder(_ sortOrder: CNRContactSortOrder) -> CNContactSortOrder 
 
 func cnrResolvedContactKeys(
   contactKeys: [CNRContactKey],
-  extraDescriptors: [CNRAdditionalKeyDescriptorPayload]
+  extraDescriptors: [CNRAdditionalKeyDescriptorPayload],
+  rawKeyDescriptors: [String] = []
 ) -> Set<CNRContactKey> {
   var keys = Set(contactKeys.isEmpty ? cnrDefaultFetchKeys() : contactKeys)
   keys.insert(.identifier)
@@ -142,7 +144,8 @@ func cnrResolvedContactKeys(
 
 func cnrKeyDescriptors(
   from contactKeys: [CNRContactKey],
-  extraDescriptors: [CNRAdditionalKeyDescriptorPayload]
+  extraDescriptors: [CNRAdditionalKeyDescriptorPayload],
+  rawKeyDescriptors: [String] = []
 ) -> [any CNKeyDescriptor] {
   let requestedKeys = contactKeys.isEmpty ? cnrDefaultFetchKeys() : contactKeys
   var descriptors: [any CNKeyDescriptor] = [CNContactIdentifierKey as NSString]
@@ -169,6 +172,12 @@ func cnrKeyDescriptors(
       descriptors.append(CNContactFormatter.descriptorForRequiredKeysForDelimiter)
     case .vcardRequiredKeys:
       descriptors.append(CNContactVCardSerialization.descriptorForRequiredKeys())
+    }
+  }
+
+  for descriptor in rawKeyDescriptors {
+    if seen.insert(descriptor).inserted {
+      descriptors.append(descriptor as NSString)
     }
   }
 

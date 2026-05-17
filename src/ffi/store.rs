@@ -3,8 +3,8 @@
 use core::ffi::{c_char, c_void};
 
 extern "C" {
-    pub fn cn_authorization_status() -> i32;
-    pub fn cn_request_access(out_error: *mut *mut c_char) -> bool;
+    pub fn cn_authorization_status(entity_type: i32) -> i32;
+    pub fn cn_request_access(entity_type: i32, out_error: *mut *mut c_char) -> bool;
 
     pub fn cn_store_new() -> *mut c_void;
     pub fn cn_store_release(store: *mut c_void);

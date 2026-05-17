@@ -18,6 +18,21 @@ use crate::private::{
     cstring_from_str, decode_base64_string, json_cstring, parse_json_ptr, take_string,
 };
 
+/// Corresponds to `CNEntityType`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum CNEntityType {
+    Contacts,
+}
+
+impl CNEntityType {
+    pub const fn raw_value(self) -> i32 {
+        match self {
+            Self::Contacts => 0,
+        }
+    }
+}
+
 /// Safe wrapper around `CNContactStore`.
 #[derive(Debug)]
 pub struct CNContactStore {
@@ -221,12 +236,26 @@ impl CNContactStore {
     }
 
     pub fn authorization_status() -> CNAuthorizationStatus {
-        CNAuthorizationStatus::from_raw(unsafe { ffi::store::cn_authorization_status() })
+        Self::authorization_status_for_entity_type(CNEntityType::Contacts)
+    }
+
+    pub fn authorization_status_for_entity_type(
+        entity_type: CNEntityType,
+    ) -> CNAuthorizationStatus {
+        CNAuthorizationStatus::from_raw(unsafe {
+            ffi::store::cn_authorization_status(entity_type.raw_value())
+        })
     }
 
     pub fn request_access() -> Result<bool, ContactsError> {
+        Self::request_access_for_entity_type(CNEntityType::Contacts)
+    }
+
+    pub fn request_access_for_entity_type(
+        entity_type: CNEntityType,
+    ) -> Result<bool, ContactsError> {
         let mut error = ptr::null_mut();
-        let granted = unsafe { ffi::store::cn_request_access(&mut error) };
+        let granted = unsafe { ffi::store::cn_request_access(entity_type.raw_value(), &mut error) };
         if error.is_null() {
             Ok(granted)
         } else {
