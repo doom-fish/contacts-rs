@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 - 2026-05-17
+
+### Fixed
+
+- Removed broken doc link to `pollster::block_on` in `AsyncCNContactStore` (was causing `cargo doc` warning).
+
 ## 0.3.0 - 2026-05-17
 
 ### Added — Async API (Tier 1)

@@ -186,7 +186,7 @@ impl Future for EnumerateContactsFuture {
 /// Async operations on `CNContactStore`.
 ///
 /// All methods are **executor-agnostic** — they work with any async runtime.
-/// Use [`pollster::block_on`] to run them synchronously in non-async contexts.
+/// Use `pollster::block_on` to run them synchronously in non-async contexts.
 #[derive(Debug, Clone, Copy)]
 pub struct AsyncCNContactStore;
 
