@@ -1,3 +1,5 @@
+//! Contact-store access and save-request helpers.
+
 use core::ffi::c_void;
 use std::ptr::{self, NonNull};
 
@@ -22,10 +24,12 @@ use crate::private::{
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CNEntityType {
+    /// The contacts type.
     Contacts,
 }
 
 impl CNEntityType {
+    /// Returns the raw framework value.
     pub const fn raw_value(self) -> i32 {
         match self {
             Self::Contacts => 0,
@@ -43,40 +47,66 @@ pub struct CNContactStore {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "camelCase")]
 pub enum CNSaveOperation {
+    /// The add-contact operation.
     AddContact {
+        /// The contact to add.
         contact: CNMutableContact,
+        /// The optional destination container identifier.
         container_identifier: Option<String>,
     },
+    /// The update-contact operation.
     UpdateContact {
+        /// The contact to update.
         contact: CNMutableContact,
     },
+    /// The delete-contact operation.
     DeleteContact {
+        /// The contact identifier to delete.
         identifier: Option<String>,
     },
+    /// The add-group operation.
     AddGroup {
+        /// The group to add.
         group: CNMutableGroup,
+        /// The optional destination container identifier.
         container_identifier: Option<String>,
     },
+    /// The update-group operation.
     UpdateGroup {
+        /// The group to update.
         group: CNMutableGroup,
     },
+    /// The delete-group operation.
     DeleteGroup {
+        /// The group identifier to delete.
         identifier: Option<String>,
     },
+    /// The add-subgroup operation.
     AddSubgroup {
+        /// The subgroup identifier to add.
         subgroup_identifier: String,
+        /// The parent group identifier.
         group_identifier: String,
     },
+    /// The remove-subgroup operation.
     RemoveSubgroup {
+        /// The subgroup identifier to remove.
         subgroup_identifier: String,
+        /// The parent group identifier.
         group_identifier: String,
     },
+    /// The add-member operation.
     AddMember {
+        /// The contact identifier to add.
         contact_identifier: String,
+        /// The group identifier that receives the member.
         group_identifier: String,
     },
+    /// The remove-member operation.
     RemoveMember {
+        /// The contact identifier to remove.
         contact_identifier: String,
+        /// The group identifier that loses the member.
         group_identifier: String,
     },
 }
@@ -85,8 +115,11 @@ pub enum CNSaveOperation {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CNSaveRequest {
+    /// The save operations to execute.
     pub operations: Vec<CNSaveOperation>,
+    /// The optional transaction author.
     pub transaction_author: Option<String>,
+    /// Whether to refetch contacts after saving.
     pub should_refetch_contacts: bool,
 }
 
@@ -101,10 +134,12 @@ impl Default for CNSaveRequest {
 }
 
 impl CNSaveRequest {
+    /// Creates a new `CNSaveRequest`.
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Adds the contact.
     pub fn add_contact(
         &mut self,
         contact: CNMutableContact,
@@ -117,12 +152,14 @@ impl CNSaveRequest {
         self
     }
 
+    /// Updates an existing contact.
     pub fn update_contact(&mut self, contact: CNMutableContact) -> &mut Self {
         self.operations
             .push(CNSaveOperation::UpdateContact { contact });
         self
     }
 
+    /// Deletes a contact.
     pub fn delete_contact(&mut self, contact: CNMutableContact) -> &mut Self {
         self.operations.push(CNSaveOperation::DeleteContact {
             identifier: contact.identifier,
@@ -130,6 +167,7 @@ impl CNSaveRequest {
         self
     }
 
+    /// Deletes a contact by identifier.
     pub fn delete_contact_by_identifier(&mut self, identifier: impl Into<String>) -> &mut Self {
         self.operations.push(CNSaveOperation::DeleteContact {
             identifier: Some(identifier.into()),
@@ -137,6 +175,7 @@ impl CNSaveRequest {
         self
     }
 
+    /// Adds the group.
     pub fn add_group(
         &mut self,
         group: CNMutableGroup,
@@ -149,11 +188,13 @@ impl CNSaveRequest {
         self
     }
 
+    /// Updates an existing group.
     pub fn update_group(&mut self, group: CNMutableGroup) -> &mut Self {
         self.operations.push(CNSaveOperation::UpdateGroup { group });
         self
     }
 
+    /// Deletes a group.
     pub fn delete_group(&mut self, group: CNMutableGroup) -> &mut Self {
         self.operations.push(CNSaveOperation::DeleteGroup {
             identifier: group.identifier,
@@ -161,6 +202,7 @@ impl CNSaveRequest {
         self
     }
 
+    /// Deletes a group by identifier.
     pub fn delete_group_by_identifier(&mut self, identifier: impl Into<String>) -> &mut Self {
         self.operations.push(CNSaveOperation::DeleteGroup {
             identifier: Some(identifier.into()),
@@ -168,6 +210,7 @@ impl CNSaveRequest {
         self
     }
 
+    /// Adds the subgroup.
     pub fn add_subgroup(
         &mut self,
         subgroup_identifier: impl Into<String>,
@@ -180,6 +223,7 @@ impl CNSaveRequest {
         self
     }
 
+    /// Removes the subgroup.
     pub fn remove_subgroup(
         &mut self,
         subgroup_identifier: impl Into<String>,
@@ -192,6 +236,7 @@ impl CNSaveRequest {
         self
     }
 
+    /// Adds the member.
     pub fn add_member(
         &mut self,
         contact_identifier: impl Into<String>,
@@ -204,6 +249,7 @@ impl CNSaveRequest {
         self
     }
 
+    /// Removes the member.
     pub fn remove_member(
         &mut self,
         contact_identifier: impl Into<String>,
@@ -216,11 +262,13 @@ impl CNSaveRequest {
         self
     }
 
+    /// Sets the transaction author.
     pub fn with_transaction_author(mut self, author: impl Into<String>) -> Self {
         self.transaction_author = Some(author.into());
         self
     }
 
+    /// Sets the should refetch contacts.
     pub fn with_should_refetch_contacts(mut self, should_refetch_contacts: bool) -> Self {
         self.should_refetch_contacts = should_refetch_contacts;
         self
@@ -228,6 +276,7 @@ impl CNSaveRequest {
 }
 
 impl CNContactStore {
+    /// Creates a new `CNContactStore`.
     pub fn new() -> Result<Self, ContactsError> {
         let raw = NonNull::new(unsafe { ffi::store::cn_store_new() }).ok_or_else(|| {
             ContactsError::OperationFailed("failed to create CNContactStore".to_owned())
@@ -240,10 +289,12 @@ impl CNContactStore {
         self.raw.as_ptr()
     }
 
+    /// Returns the authorization status for contacts.
     pub fn authorization_status() -> CNAuthorizationStatus {
         Self::authorization_status_for_entity_type(CNEntityType::Contacts)
     }
 
+    /// Returns the authorization status for the given entity type.
     pub fn authorization_status_for_entity_type(
         entity_type: CNEntityType,
     ) -> CNAuthorizationStatus {
@@ -252,10 +303,12 @@ impl CNContactStore {
         })
     }
 
+    /// Requests access for the given entity type.
     pub fn request_access() -> Result<bool, ContactsError> {
         Self::request_access_for_entity_type(CNEntityType::Contacts)
     }
 
+    /// Requests access for the given entity type.
     pub fn request_access_for_entity_type(
         entity_type: CNEntityType,
     ) -> Result<bool, ContactsError> {
@@ -268,6 +321,7 @@ impl CNContactStore {
         }
     }
 
+    /// Returns the default container identifier.
     pub fn default_container_identifier(&self) -> Option<String> {
         unsafe {
             take_string(ffi::store::cn_store_default_container_identifier(
@@ -276,6 +330,7 @@ impl CNContactStore {
         }
     }
 
+    /// Returns the current history token.
     pub fn current_history_token(&self) -> Result<Option<Vec<u8>>, ContactsError> {
         let token = unsafe {
             take_string(ffi::store::cn_store_current_history_token(
@@ -287,10 +342,12 @@ impl CNContactStore {
             .transpose()
     }
 
+    /// Returns all groups.
     pub fn groups(&self) -> Result<Vec<CNGroup>, ContactsError> {
         self.groups_matching(None)
     }
 
+    /// Returns the groups matching the predicate.
     pub fn groups_matching(
         &self,
         predicate: Option<&CNGroupPredicate>,
@@ -315,10 +372,12 @@ impl CNContactStore {
         }
     }
 
+    /// Returns all containers.
     pub fn containers(&self) -> Result<Vec<CNContainer>, ContactsError> {
         self.containers_matching(None)
     }
 
+    /// Returns the containers matching the predicate.
     pub fn containers_matching(
         &self,
         predicate: Option<&CNContainerPredicate>,
@@ -345,6 +404,7 @@ impl CNContactStore {
         }
     }
 
+    /// Enumerates contacts matching the fetch request.
     pub fn enumerate_contacts(
         &self,
         request: &CNContactFetchRequest,
@@ -352,6 +412,7 @@ impl CNContactStore {
         self.enumerate_contacts_limited(request, 0)
     }
 
+    /// Enumerates contacts matching the fetch request up to the limit.
     pub fn enumerate_contacts_limited(
         &self,
         request: &CNContactFetchRequest,
@@ -374,6 +435,7 @@ impl CNContactStore {
         }
     }
 
+    /// Fetches contacts together with the current history token.
     pub fn contacts_result(
         &self,
         request: &CNContactFetchRequest,
@@ -394,6 +456,7 @@ impl CNContactStore {
         }
     }
 
+    /// Fetches contacts matching the fetch request.
     pub fn fetch_contacts(
         &self,
         request: &CNContactFetchRequest,
@@ -401,6 +464,7 @@ impl CNContactStore {
         self.enumerate_contacts(request)
     }
 
+    /// Fetches mutable contacts matching the fetch request.
     pub fn fetch_mutable_contacts(
         &self,
         request: &CNContactFetchRequest,
@@ -412,6 +476,7 @@ impl CNContactStore {
             .collect())
     }
 
+    /// Fetches a unified contact by identifier.
     pub fn unified_contact(
         &self,
         identifier: &str,
@@ -437,6 +502,7 @@ impl CNContactStore {
         }
     }
 
+    /// Fetches the unified Me contact.
     pub fn unified_me_contact(
         &self,
         keys_to_fetch: &[CNContactKey],
@@ -459,6 +525,7 @@ impl CNContactStore {
         }
     }
 
+    /// Fetches a unified mutable contact by identifier.
     pub fn unified_mutable_contact(
         &self,
         identifier: &str,
@@ -469,6 +536,7 @@ impl CNContactStore {
             .map(CNMutableContact::from))
     }
 
+    /// Fetches change-history events for the request.
     pub fn fetch_change_history(
         &self,
         request: &CNChangeHistoryFetchRequest,
@@ -489,6 +557,7 @@ impl CNContactStore {
         }
     }
 
+    /// Executes the save request.
     pub fn execute_save_request(&self, request: &CNSaveRequest) -> Result<(), ContactsError> {
         let request_json = json_cstring(request, "CNSaveRequest")?;
         let mut error = ptr::null_mut();
@@ -506,6 +575,7 @@ impl CNContactStore {
         }
     }
 
+    /// Saves a new contact.
     pub fn save_contact(
         &self,
         contact: CNMutableContact,
@@ -516,18 +586,21 @@ impl CNContactStore {
         self.execute_save_request(&request)
     }
 
+    /// Updates an existing contact.
     pub fn update_contact(&self, contact: CNMutableContact) -> Result<(), ContactsError> {
         let mut request = CNSaveRequest::new();
         request.update_contact(contact);
         self.execute_save_request(&request)
     }
 
+    /// Deletes a contact.
     pub fn delete_contact(&self, contact: CNMutableContact) -> Result<(), ContactsError> {
         let mut request = CNSaveRequest::new();
         request.delete_contact(contact);
         self.execute_save_request(&request)
     }
 
+    /// Deletes a contact by identifier.
     pub fn delete_contact_by_identifier(
         &self,
         identifier: impl Into<String>,
@@ -537,6 +610,7 @@ impl CNContactStore {
         self.execute_save_request(&request)
     }
 
+    /// Saves a new group.
     pub fn save_group(
         &self,
         group: CNMutableGroup,
@@ -547,18 +621,21 @@ impl CNContactStore {
         self.execute_save_request(&request)
     }
 
+    /// Updates an existing group.
     pub fn update_group(&self, group: CNMutableGroup) -> Result<(), ContactsError> {
         let mut request = CNSaveRequest::new();
         request.update_group(group);
         self.execute_save_request(&request)
     }
 
+    /// Deletes a group.
     pub fn delete_group(&self, group: CNMutableGroup) -> Result<(), ContactsError> {
         let mut request = CNSaveRequest::new();
         request.delete_group(group);
         self.execute_save_request(&request)
     }
 
+    /// Deletes a group by identifier.
     pub fn delete_group_by_identifier(
         &self,
         identifier: impl Into<String>,
@@ -568,6 +645,7 @@ impl CNContactStore {
         self.execute_save_request(&request)
     }
 
+    /// Adds a contact to a group.
     pub fn add_member_to_group(
         &self,
         contact_identifier: impl Into<String>,
@@ -578,6 +656,7 @@ impl CNContactStore {
         self.execute_save_request(&request)
     }
 
+    /// Removes a contact from a group.
     pub fn remove_member_from_group(
         &self,
         contact_identifier: impl Into<String>,
@@ -588,6 +667,7 @@ impl CNContactStore {
         self.execute_save_request(&request)
     }
 
+    /// Adds a subgroup to a group.
     pub fn add_subgroup_to_group(
         &self,
         subgroup_identifier: impl Into<String>,
@@ -598,6 +678,7 @@ impl CNContactStore {
         self.execute_save_request(&request)
     }
 
+    /// Removes a subgroup from a group.
     pub fn remove_subgroup_from_group(
         &self,
         subgroup_identifier: impl Into<String>,

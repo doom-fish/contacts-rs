@@ -1,3 +1,5 @@
+//! Error and authorization types for Contacts operations.
+
 use core::fmt;
 use std::ffi::CStr;
 
@@ -9,11 +11,17 @@ use crate::ffi;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum CNAuthorizationStatus {
+    /// The not determined status.
     NotDetermined,
+    /// The restricted status.
     Restricted,
+    /// The denied status.
     Denied,
+    /// The authorized status.
     Authorized,
+    /// The limited status.
     Limited,
+    /// An unrecognized authorization status.
     Unknown(i32),
 }
 
@@ -29,6 +37,7 @@ impl CNAuthorizationStatus {
         }
     }
 
+    /// Returns whether access is authorized.
     pub const fn is_authorized(self) -> bool {
         matches!(self, Self::Authorized | Self::Limited)
     }
@@ -38,38 +47,68 @@ impl CNAuthorizationStatus {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[non_exhaustive]
 pub enum CNErrorCode {
+    /// The communication error error code.
     CommunicationError,
+    /// The data access error error code.
     DataAccessError,
+    /// The authorization denied error code.
     AuthorizationDenied,
+    /// The no accessable writable containers error code.
     NoAccessableWritableContainers,
+    /// The unauthorized keys error code.
     UnauthorizedKeys,
+    /// The feature disabled by user error code.
     FeatureDisabledByUser,
+    /// The feature not available error code.
     FeatureNotAvailable,
+    /// The record does not exist error code.
     RecordDoesNotExist,
+    /// The inserted record already exists error code.
     InsertedRecordAlreadyExists,
+    /// The containment cycle error code.
     ContainmentCycle,
+    /// The containment scope error code.
     ContainmentScope,
+    /// The parent record does not exist error code.
     ParentRecordDoesNotExist,
+    /// The record identifier invalid error code.
     RecordIdentifierInvalid,
+    /// The record not writable error code.
     RecordNotWritable,
+    /// The parent container not writable error code.
     ParentContainerNotWritable,
+    /// The validation multiple errors error code.
     ValidationMultipleErrors,
+    /// The validation type mismatch error code.
     ValidationTypeMismatch,
+    /// The validation configuration error error code.
     ValidationConfigurationError,
+    /// The predicate invalid error code.
     PredicateInvalid,
+    /// The policy violation error code.
     PolicyViolation,
+    /// The client identifier invalid error code.
     ClientIdentifierInvalid,
+    /// The client identifier does not exist error code.
     ClientIdentifierDoesNotExist,
+    /// The client identifier collision error code.
     ClientIdentifierCollision,
+    /// The change history expired error code.
     ChangeHistoryExpired,
+    /// The change history invalid anchor error code.
     ChangeHistoryInvalidAnchor,
+    /// The change history invalid fetch request error code.
     ChangeHistoryInvalidFetchRequest,
+    /// The v Card malformed error code.
     VCardMalformed,
+    /// The v Card summarization error error code.
     VCardSummarizationError,
+    /// An unrecognized error code.
     Unknown(i64),
 }
 
 impl CNErrorCode {
+    /// Creates a value from raw.
     pub const fn from_raw(raw: i64) -> Self {
         match raw {
             1 => Self::CommunicationError,
@@ -104,6 +143,7 @@ impl CNErrorCode {
         }
     }
 
+    /// Returns the raw framework value.
     pub const fn raw_value(self) -> i64 {
         match self {
             Self::CommunicationError => 1,
@@ -142,8 +182,11 @@ impl CNErrorCode {
 /// Structured `NSError` details encoded by the Swift bridge.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct NSErrorInfo {
+    /// The domain.
     pub domain: String,
+    /// The code.
     pub code: i64,
+    /// The message.
     pub message: String,
 }
 
@@ -157,8 +200,11 @@ impl fmt::Display for NSErrorInfo {
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum ContactsError {
+    /// An invalid-argument error.
     InvalidArgument(String),
+    /// A framework error.
     Framework(NSErrorInfo),
+    /// An operation-failed error.
     OperationFailed(String),
 }
 

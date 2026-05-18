@@ -1,3 +1,5 @@
+//! Formatting helpers for contacts and postal addresses.
+
 use serde::{Deserialize, Serialize};
 
 use crate::contact::CNContact;
@@ -11,7 +13,9 @@ use crate::properties::CNPostalAddress;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CNContactFormatterStyle {
+    /// The full name variant.
     FullName,
+    /// The phonetic full name variant.
     PhoneticFullName,
 }
 
@@ -19,8 +23,11 @@ pub enum CNContactFormatterStyle {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CNContactDisplayNameOrder {
+    /// The user default order.
     UserDefault,
+    /// The given naMe first order.
     GivenNameFirst,
+    /// The family naMe first order.
     FamilyNameFirst,
 }
 
@@ -29,6 +36,7 @@ pub enum CNContactDisplayNameOrder {
 #[serde(rename_all = "camelCase")]
 pub enum CNPostalAddressFormatterStyle {
     #[default]
+    /// The mailing address variant.
     MailingAddress,
 }
 
@@ -36,8 +44,10 @@ pub enum CNPostalAddressFormatterStyle {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNAttributedString {
+    /// The plain string value.
     pub string: String,
     #[serde(default)]
+    /// The attributed runs.
     pub runs: Vec<CNAttributedStringRun>,
 }
 
@@ -45,33 +55,43 @@ pub struct CNAttributedString {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNAttributedStringRun {
+    /// The location.
     pub location: usize,
+    /// The length.
     pub length: usize,
+    /// The value.
     pub value: String,
     #[serde(default)]
+    /// The property.
     pub property: Option<String>,
     #[serde(default)]
+    /// The localized property name.
     pub localized_property_name: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, Default)]
+/// The `CNContactFormatter` namespace wrapper.
 pub struct CNContactFormatter;
 
 impl CNContactFormatter {
+    /// Returns the descriptor for the formatter style.
     pub fn descriptor_for_required_keys_for_style(
         style: CNContactFormatterStyle,
     ) -> CNAdditionalKeyDescriptor {
         CNAdditionalKeyDescriptor::FormatterRequiredKeys { style }
     }
 
+    /// Returns the descriptor for the formatter name-order keys.
     pub fn descriptor_for_required_keys_for_name_order() -> CNAdditionalKeyDescriptor {
         CNAdditionalKeyDescriptor::FormatterNameOrder
     }
 
+    /// Returns the descriptor for the formatter delimiter keys.
     pub fn descriptor_for_required_keys_for_delimiter() -> CNAdditionalKeyDescriptor {
         CNAdditionalKeyDescriptor::FormatterDelimiter
     }
 
+    /// Formats the contact as a string.
     pub fn string_from_contact(
         contact: &CNContact,
         style: CNContactFormatterStyle,
@@ -102,6 +122,7 @@ impl CNContactFormatter {
         }
     }
 
+    /// Formats the contact as an attributed string.
     pub fn attributed_string_from_contact(
         contact: &CNContact,
         style: CNContactFormatterStyle,
@@ -128,6 +149,7 @@ impl CNContactFormatter {
         }
     }
 
+    /// Returns the display-name order for the contact.
     pub fn name_order_for_contact(
         contact: &CNContact,
     ) -> Result<CNContactDisplayNameOrder, ContactsError> {
@@ -149,6 +171,7 @@ impl CNContactFormatter {
         }
     }
 
+    /// Returns the delimiter for the contact.
     pub fn delimiter_for_contact(contact: &CNContact) -> Result<String, ContactsError> {
         let contact_json = json_cstring(contact, "CNContact")?;
         let mut error = core::ptr::null_mut();
@@ -171,15 +194,19 @@ impl CNContactFormatter {
 }
 
 #[derive(Debug, Clone, Copy, Default)]
+/// The `CNPostalAddressFormatter` wrapper.
 pub struct CNPostalAddressFormatter {
+    /// The formatter style.
     pub style: CNPostalAddressFormatterStyle,
 }
 
 impl CNPostalAddressFormatter {
+    /// Creates a new `CNPostalAddressFormatter`.
     pub fn new(style: CNPostalAddressFormatterStyle) -> Self {
         Self { style }
     }
 
+    /// Formats the postal address as a string.
     pub fn string_from_postal_address(
         postal_address: &CNPostalAddress,
         style: CNPostalAddressFormatterStyle,
@@ -211,6 +238,7 @@ impl CNPostalAddressFormatter {
         }
     }
 
+    /// Formats the postal address as an attributed string.
     pub fn attributed_string_from_postal_address(
         postal_address: &CNPostalAddress,
         style: CNPostalAddressFormatterStyle,
@@ -237,10 +265,12 @@ impl CNPostalAddressFormatter {
         }
     }
 
+    /// Formats the postal address using this formatter.
     pub fn string_from(&self, postal_address: &CNPostalAddress) -> Result<String, ContactsError> {
         Self::string_from_postal_address(postal_address, self.style)
     }
 
+    /// Formats the postal address as an attributed string using this formatter.
     pub fn attributed_string_from(
         &self,
         postal_address: &CNPostalAddress,

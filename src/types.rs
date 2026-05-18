@@ -1,3 +1,5 @@
+//! Compatibility re-exports for the crate's public types.
+
 pub use crate::change_notifications::{
     contact_store_did_change_notification_name, CNChangeHistoryEvent, CNChangeHistoryEventVisitor,
     CNChangeHistoryFetchRequest, CNFetchResult,

@@ -1,4 +1,5 @@
 #![allow(clippy::unsafe_derive_deserialize)]
+//! Property value types and localized-string helpers.
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -12,14 +13,18 @@ use crate::private::{cstring_from_str, json_cstring, take_required_string};
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CNLabeledValue<T> {
+    /// The labeled-value identifier.
     #[serde(default)]
     pub identifier: Option<String>,
+    /// The labeled-value label.
     #[serde(default)]
     pub label: Option<String>,
+    /// The labeled-value payload.
     pub value: T,
 }
 
 impl<T> CNLabeledValue<T> {
+    /// Creates a new labeled value.
     pub fn new(label: Option<String>, value: T) -> Self {
         Self {
             identifier: None,
@@ -28,16 +33,19 @@ impl<T> CNLabeledValue<T> {
         }
     }
 
+    /// Sets the identifier.
     pub fn with_identifier(mut self, identifier: impl Into<String>) -> Self {
         self.identifier = Some(identifier.into());
         self
     }
 
+    /// Sets the label.
     pub fn with_label(mut self, label: Option<String>) -> Self {
         self.label = label;
         self
     }
 
+    /// Maps the inner value while preserving the label metadata.
     pub fn map<U>(self, map: impl FnOnce(T) -> U) -> CNLabeledValue<U> {
         CNLabeledValue {
             identifier: self.identifier,
@@ -51,10 +59,12 @@ impl<T> CNLabeledValue<T> {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNPhoneNumber {
+    /// The string value.
     pub string_value: String,
 }
 
 impl CNPhoneNumber {
+    /// Creates a new `CNPhoneNumber`.
     pub fn new(string_value: impl Into<String>) -> Self {
         Self {
             string_value: string_value.into(),
@@ -78,17 +88,26 @@ impl From<&str> for CNPhoneNumber {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNPostalAddress {
+    /// The street.
     pub street: String,
+    /// The sub locality.
     pub sub_locality: String,
+    /// The city.
     pub city: String,
+    /// The sub administrative area.
     pub sub_administrative_area: String,
+    /// The state.
     pub state: String,
+    /// The postal code.
     pub postal_code: String,
+    /// The country.
     pub country: String,
+    /// The ISO country code.
     pub iso_country_code: String,
 }
 
 impl CNPostalAddress {
+    /// Creates a new `CNPostalAddress`.
     pub fn new(street: impl Into<String>) -> Self {
         Self {
             street: street.into(),
@@ -101,56 +120,73 @@ impl CNPostalAddress {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNMutablePostalAddress {
+    /// The street.
     pub street: String,
+    /// The sub locality.
     pub sub_locality: String,
+    /// The city.
     pub city: String,
+    /// The sub administrative area.
     pub sub_administrative_area: String,
+    /// The state.
     pub state: String,
+    /// The postal code.
     pub postal_code: String,
+    /// The country.
     pub country: String,
+    /// The ISO country code.
     pub iso_country_code: String,
 }
 
 impl CNMutablePostalAddress {
+    /// Creates a new `CNMutablePostalAddress`.
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Sets the street.
     pub fn with_street(mut self, value: impl Into<String>) -> Self {
         self.street = value.into();
         self
     }
 
+    /// Sets the sub locality.
     pub fn with_sub_locality(mut self, value: impl Into<String>) -> Self {
         self.sub_locality = value.into();
         self
     }
 
+    /// Sets the city.
     pub fn with_city(mut self, value: impl Into<String>) -> Self {
         self.city = value.into();
         self
     }
 
+    /// Sets the sub administrative area.
     pub fn with_sub_administrative_area(mut self, value: impl Into<String>) -> Self {
         self.sub_administrative_area = value.into();
         self
     }
 
+    /// Sets the state.
     pub fn with_state(mut self, value: impl Into<String>) -> Self {
         self.state = value.into();
         self
     }
 
+    /// Sets the postal code.
     pub fn with_postal_code(mut self, value: impl Into<String>) -> Self {
         self.postal_code = value.into();
         self
     }
 
+    /// Sets the country.
     pub fn with_country(mut self, value: impl Into<String>) -> Self {
         self.country = value.into();
         self
     }
 
+    /// Sets the ISO country code.
     pub fn with_iso_country_code(mut self, value: impl Into<String>) -> Self {
         self.iso_country_code = value.into();
         self
@@ -161,11 +197,14 @@ impl CNMutablePostalAddress {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNInstantMessageAddress {
+    /// The username.
     pub username: String,
+    /// The service.
     pub service: String,
 }
 
 impl CNInstantMessageAddress {
+    /// Creates a new `CNInstantMessageAddress`.
     pub fn new(username: impl Into<String>, service: impl Into<String>) -> Self {
         Self {
             username: username.into(),
@@ -178,13 +217,18 @@ impl CNInstantMessageAddress {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNSocialProfile {
+    /// The URL string.
     pub url_string: String,
+    /// The username.
     pub username: String,
+    /// The user identifier.
     pub user_identifier: String,
+    /// The service.
     pub service: String,
 }
 
 impl CNSocialProfile {
+    /// Creates a new `CNSocialProfile`.
     pub fn new(
         url_string: impl Into<String>,
         username: impl Into<String>,
@@ -204,15 +248,24 @@ impl CNSocialProfile {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNDateComponents {
+    /// The era.
     pub era: Option<i32>,
+    /// The year.
     pub year: Option<i32>,
+    /// The month.
     pub month: Option<i32>,
+    /// The day.
     pub day: Option<i32>,
+    /// The hour.
     pub hour: Option<i32>,
+    /// The minute.
     pub minute: Option<i32>,
+    /// The second.
     pub second: Option<i32>,
+    /// The is leap month.
     pub is_leap_month: Option<bool>,
     #[serde(default)]
+    /// The calendar identifier.
     pub calendar_identifier: Option<String>,
 }
 
@@ -220,12 +273,17 @@ pub struct CNDateComponents {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CNContactProperty {
+    /// The contact.
     pub contact: CNContact,
+    /// The key.
     pub key: String,
+    /// The value.
     pub value: Value,
     #[serde(default)]
+    /// The identifier.
     pub identifier: Option<String>,
     #[serde(default)]
+    /// The label.
     pub label: Option<String>,
 }
 
@@ -233,13 +291,21 @@ pub struct CNContactProperty {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CNPostalAddressKey {
+    /// The street key.
     Street,
+    /// The sub locality key.
     SubLocality,
+    /// The city key.
     City,
+    /// The sub administrative area key.
     SubAdministrativeArea,
+    /// The state key.
     State,
+    /// The postal code key.
     PostalCode,
+    /// The country key.
     Country,
+    /// The iso country code key.
     IsoCountryCode,
 }
 
@@ -247,7 +313,9 @@ pub enum CNPostalAddressKey {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CNInstantMessageAddressKey {
+    /// The username key.
     Username,
+    /// The service key.
     Service,
 }
 
@@ -255,13 +323,18 @@ pub enum CNInstantMessageAddressKey {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum CNSocialProfileKey {
+    /// The url string key.
     UrlString,
+    /// The username key.
     Username,
+    /// The user identifier key.
     UserIdentifier,
+    /// The service key.
     Service,
 }
 
 impl<T> CNLabeledValue<T> {
+    /// Returns the localized string for the given label.
     pub fn localized_string_for_label(label: &str) -> Result<String, ContactsError> {
         let label = cstring_from_str(label, "CNLabeledValue label")?;
         unsafe {
@@ -274,6 +347,7 @@ impl<T> CNLabeledValue<T> {
 }
 
 impl CNPostalAddress {
+    /// Returns the localized string for the given key.
     pub fn localized_string_for_key(key: CNPostalAddressKey) -> Result<String, ContactsError> {
         let key_json = json_cstring(&key, "CNPostalAddressKey")?;
         let mut error = core::ptr::null_mut();
@@ -327,6 +401,7 @@ impl From<CNMutablePostalAddress> for CNPostalAddress {
 }
 
 impl CNInstantMessageAddress {
+    /// Returns the localized string for the given key.
     pub fn localized_string_for_key(
         key: CNInstantMessageAddressKey,
     ) -> Result<String, ContactsError> {
@@ -352,6 +427,7 @@ impl CNInstantMessageAddress {
         }
     }
 
+    /// Returns the localized string for the given service.
     pub fn localized_string_for_service(service: &str) -> Result<String, ContactsError> {
         let service = cstring_from_str(service, "CNInstantMessageAddress service")?;
         unsafe {
@@ -364,6 +440,7 @@ impl CNInstantMessageAddress {
 }
 
 impl CNSocialProfile {
+    /// Returns the localized string for the given key.
     pub fn localized_string_for_key(key: CNSocialProfileKey) -> Result<String, ContactsError> {
         let key_json = json_cstring(&key, "CNSocialProfileKey")?;
         let mut error = core::ptr::null_mut();
@@ -385,6 +462,7 @@ impl CNSocialProfile {
         }
     }
 
+    /// Returns the localized string for the given service.
     pub fn localized_string_for_service(service: &str) -> Result<String, ContactsError> {
         let service = cstring_from_str(service, "CNSocialProfile service")?;
         unsafe {

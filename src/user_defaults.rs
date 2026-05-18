@@ -1,3 +1,5 @@
+//! User-default helpers exposed by Contacts.
+
 use core::ffi::c_void;
 use std::ptr::NonNull;
 
@@ -13,6 +15,7 @@ pub struct CNContactsUserDefaults {
 }
 
 impl CNContactsUserDefaults {
+    /// Returns the shared user-defaults instance.
     pub fn shared() -> Result<Self, ContactsError> {
         let raw = NonNull::new(unsafe { ffi::user_defaults::cn_contacts_user_defaults_shared() })
             .ok_or_else(|| {
@@ -23,12 +26,14 @@ impl CNContactsUserDefaults {
         Ok(Self { raw })
     }
 
+    /// Returns the preferred contact sort order.
     pub fn sort_order(&self) -> CNContactSortOrder {
         CNContactSortOrder::from_raw(unsafe {
             ffi::user_defaults::cn_contacts_user_defaults_sort_order(self.raw.as_ptr())
         })
     }
 
+    /// Returns the preferred country code.
     pub fn country_code(&self) -> Result<String, ContactsError> {
         let mut error = core::ptr::null_mut();
         let value = unsafe {

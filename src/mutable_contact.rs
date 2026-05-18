@@ -1,3 +1,5 @@
+//! Mutable contact builders and conversion helpers.
+
 use serde::{Deserialize, Serialize};
 
 use crate::contact::{CNContact, CNContactType};
@@ -11,88 +13,129 @@ use crate::properties::{
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct CNMutableContact {
+    /// The identifier.
     pub identifier: Option<String>,
+    /// The contact type.
     pub contact_type: Option<CNContactType>,
+    /// The name prefix.
     pub name_prefix: Option<String>,
+    /// The given name.
     pub given_name: Option<String>,
+    /// The middle name.
     pub middle_name: Option<String>,
+    /// The family name.
     pub family_name: Option<String>,
+    /// The previous family name.
     pub previous_family_name: Option<String>,
+    /// The name suffix.
     pub name_suffix: Option<String>,
+    /// The nickname.
     pub nickname: Option<String>,
+    /// The organization name.
     pub organization_name: Option<String>,
+    /// The department name.
     pub department_name: Option<String>,
+    /// The job title.
     pub job_title: Option<String>,
+    /// The phonetic given name.
     pub phonetic_given_name: Option<String>,
+    /// The phonetic middle name.
     pub phonetic_middle_name: Option<String>,
+    /// The phonetic family name.
     pub phonetic_family_name: Option<String>,
+    /// The phonetic organization name.
     pub phonetic_organization_name: Option<String>,
+    /// The note.
     pub note: Option<String>,
     #[serde(default, with = "crate::private::serde_base64::option")]
+    /// The image data.
     pub image_data: Option<Vec<u8>>,
     #[serde(default)]
+    /// Whether to clear image data.
     pub clear_image_data: bool,
+    /// The phone numbers.
     pub phone_numbers: Option<Vec<CNLabeledValue<CNPhoneNumber>>>,
+    /// The email addresses.
     pub email_addresses: Option<Vec<CNLabeledValue<String>>>,
+    /// The postal addresses.
     pub postal_addresses: Option<Vec<CNLabeledValue<CNPostalAddress>>>,
+    /// The dates.
     pub dates: Option<Vec<CNLabeledValue<CNDateComponents>>>,
+    /// The URL addresses.
     pub url_addresses: Option<Vec<CNLabeledValue<String>>>,
+    /// The contact relations.
     pub contact_relations: Option<Vec<CNLabeledValue<CNContactRelation>>>,
+    /// The social profiles.
     pub social_profiles: Option<Vec<CNLabeledValue<CNSocialProfile>>>,
+    /// The instant message addresses.
     pub instant_message_addresses: Option<Vec<CNLabeledValue<CNInstantMessageAddress>>>,
+    /// The birthday.
     pub birthday: Option<CNDateComponents>,
     #[serde(default)]
+    /// Whether to clear birthday.
     pub clear_birthday: bool,
+    /// The non-Gregorian birthday.
     pub non_gregorian_birthday: Option<CNDateComponents>,
     #[serde(default)]
+    /// Whether to clear non-Gregorian birthday.
     pub clear_non_gregorian_birthday: bool,
 }
 
 impl CNMutableContact {
+    /// Creates a new `CNMutableContact`.
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Sets the identifier.
     pub fn with_identifier(mut self, value: impl Into<String>) -> Self {
         self.identifier = Some(value.into());
         self
     }
 
+    /// Sets the given name.
     pub fn with_given_name(mut self, value: impl Into<String>) -> Self {
         self.given_name = Some(value.into());
         self
     }
 
+    /// Sets the family name.
     pub fn with_family_name(mut self, value: impl Into<String>) -> Self {
         self.family_name = Some(value.into());
         self
     }
 
+    /// Sets the organization name.
     pub fn with_organization_name(mut self, value: impl Into<String>) -> Self {
         self.organization_name = Some(value.into());
         self
     }
 
+    /// Sets the note.
     pub fn with_note(mut self, value: impl Into<String>) -> Self {
         self.note = Some(value.into());
         self
     }
 
+    /// Sets the phone numbers.
     pub fn with_phone_numbers(mut self, values: Vec<CNLabeledValue<CNPhoneNumber>>) -> Self {
         self.phone_numbers = Some(values);
         self
     }
 
+    /// Sets the email addresses.
     pub fn with_email_addresses(mut self, values: Vec<CNLabeledValue<String>>) -> Self {
         self.email_addresses = Some(values);
         self
     }
 
+    /// Sets the postal addresses.
     pub fn with_postal_addresses(mut self, values: Vec<CNLabeledValue<CNPostalAddress>>) -> Self {
         self.postal_addresses = Some(values);
         self
     }
 
+    /// Sets the contact relations.
     pub fn with_contact_relations(
         mut self,
         values: Vec<CNLabeledValue<CNContactRelation>>,
@@ -101,11 +144,13 @@ impl CNMutableContact {
         self
     }
 
+    /// Sets the social profiles.
     pub fn with_social_profiles(mut self, values: Vec<CNLabeledValue<CNSocialProfile>>) -> Self {
         self.social_profiles = Some(values);
         self
     }
 
+    /// Sets the instant message addresses.
     pub fn with_instant_message_addresses(
         mut self,
         values: Vec<CNLabeledValue<CNInstantMessageAddress>>,
@@ -114,42 +159,49 @@ impl CNMutableContact {
         self
     }
 
+    /// Sets the birthday.
     pub fn with_birthday(mut self, value: CNDateComponents) -> Self {
         self.birthday = Some(value);
         self.clear_birthday = false;
         self
     }
 
+    /// Clears the birthday.
     pub fn clear_birthday(mut self) -> Self {
         self.birthday = None;
         self.clear_birthday = true;
         self
     }
 
+    /// Sets the non-Gregorian birthday.
     pub fn with_non_gregorian_birthday(mut self, value: CNDateComponents) -> Self {
         self.non_gregorian_birthday = Some(value);
         self.clear_non_gregorian_birthday = false;
         self
     }
 
+    /// Clears the non-Gregorian birthday.
     pub fn clear_non_gregorian_birthday(mut self) -> Self {
         self.non_gregorian_birthday = None;
         self.clear_non_gregorian_birthday = true;
         self
     }
 
+    /// Sets the image data.
     pub fn with_image_data(mut self, value: Vec<u8>) -> Self {
         self.image_data = Some(value);
         self.clear_image_data = false;
         self
     }
 
+    /// Clears the image data.
     pub fn clear_image_data(mut self) -> Self {
         self.image_data = None;
         self.clear_image_data = true;
         self
     }
 
+    /// Returns a display name.
     pub fn display_name(&self) -> String {
         let given = self.given_name.as_deref().unwrap_or_default();
         let family = self.family_name.as_deref().unwrap_or_default();

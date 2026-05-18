@@ -1,3 +1,5 @@
+//! vCard serialization and deserialization helpers.
+
 use base64::{engine::general_purpose::STANDARD, Engine as _};
 use core::ptr;
 
@@ -14,10 +16,12 @@ use crate::private::{
 pub struct CNContactVCardSerialization;
 
 impl CNContactVCardSerialization {
+    /// Returns the descriptor for required vCard keys.
     pub fn descriptor_for_required_keys() -> CNAdditionalKeyDescriptor {
         CNAdditionalKeyDescriptor::VCardRequiredKeys
     }
 
+    /// Returns the data with contacts.
     pub fn data_with_contacts(contacts: &[CNContact]) -> Result<Vec<u8>, ContactsError> {
         let contacts_json = json_cstring(contacts, "[CNContact]")?;
         let mut error = ptr::null_mut();
@@ -40,6 +44,7 @@ impl CNContactVCardSerialization {
         }
     }
 
+    /// Returns the contacts with data.
     pub fn contacts_with_data(data: &[u8]) -> Result<Vec<CNContact>, ContactsError> {
         let payload = cstring_from_str(&STANDARD.encode(data), "vCard data")?;
         let mut error = ptr::null_mut();

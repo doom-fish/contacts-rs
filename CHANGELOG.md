@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.3] - 2026-05-18
+
+- Added concise rustdoc coverage to every public item in non-generated `src/` modules, including re-export module headers and public builder APIs.
+- Reached 100.0% rustdoc documentation coverage for non-generated source (`cargo +nightly rustdoc --lib --all-features -- -Z unstable-options --show-coverage`).
+
 ## [0.3.2] - 2026-05-18
 
 - Widen doom-fish-utils version bound to `<0.3` so 0.2.x resolves.
