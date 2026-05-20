@@ -1,3 +1,5 @@
+#![cfg(feature = "async")]
+
 mod common;
 
 use contacts::async_api::AsyncCNContactStore;

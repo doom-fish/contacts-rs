@@ -48,12 +48,14 @@ extern "C" {
         out_error: *mut *mut c_char,
     ) -> i32;
 
-    // Async thunks — linked unconditionally; used only from async_api (feature = "async")
+    // Async thunks — linked only when the async feature is enabled.
+    #[cfg(feature = "async")]
     pub fn cn_request_access_async(
         entity_type: i32,
         cb: extern "C" fn(bool, *const c_char, *mut c_void),
         ctx: *mut c_void,
     );
+    #[cfg(feature = "async")]
     pub fn cn_enumerate_contacts_async(
         store: *mut c_void,
         request_json: *const c_char,

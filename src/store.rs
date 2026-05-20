@@ -285,6 +285,7 @@ impl CNContactStore {
     }
 
     /// Returns the raw opaque pointer to the underlying `CNContactStore`.
+    #[cfg(feature = "async")]
     pub(crate) fn as_ptr(&self) -> *mut c_void {
         self.raw.as_ptr()
     }
