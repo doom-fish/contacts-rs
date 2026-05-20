@@ -473,3 +473,71 @@ impl CNSocialProfile {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn labeled_value_builders_set_metadata() {
+        let labeled_value = CNLabeledValue::new(Some("home".to_owned()), "taylor@example.com".to_owned())
+            .with_identifier("email-1")
+            .with_label(Some("work".to_owned()));
+
+        assert_eq!(labeled_value.identifier.as_deref(), Some("email-1"));
+        assert_eq!(labeled_value.label.as_deref(), Some("work"));
+        assert_eq!(labeled_value.value, "taylor@example.com");
+    }
+
+    #[test]
+    fn labeled_value_map_preserves_metadata() {
+        let mapped = CNLabeledValue::new(Some("mobile".to_owned()), "+1-555-0100".to_owned())
+            .with_identifier("phone-1")
+            .map(CNPhoneNumber::new);
+
+        assert_eq!(mapped.identifier.as_deref(), Some("phone-1"));
+        assert_eq!(mapped.label.as_deref(), Some("mobile"));
+        assert_eq!(mapped.value.string_value, "+1-555-0100");
+    }
+
+    #[test]
+    fn phone_number_conversions_preserve_string_value() {
+        assert_eq!(CNPhoneNumber::from("+1-555-0100").string_value, "+1-555-0100");
+        assert_eq!(
+            CNPhoneNumber::from(String::from("+1-555-0101")).string_value,
+            "+1-555-0101"
+        );
+    }
+
+    #[test]
+    fn date_components_round_trip_through_json() {
+        let components = CNDateComponents {
+            year: Some(2026),
+            month: Some(5),
+            day: Some(20),
+            calendar_identifier: Some("gregorian".to_owned()),
+            ..CNDateComponents::default()
+        };
+
+        let encoded = serde_json::to_string(&components).unwrap();
+        let decoded: CNDateComponents = serde_json::from_str(&encoded).unwrap();
+
+        assert_eq!(decoded, components);
+    }
+
+    #[test]
+    fn mutable_postal_address_round_trip_to_immutable_preserves_fields() {
+        let mutable = CNMutablePostalAddress::new()
+            .with_street("1 Infinite Loop")
+            .with_city("Cupertino")
+            .with_state("CA")
+            .with_postal_code("95014")
+            .with_country("USA")
+            .with_iso_country_code("US");
+
+        let immutable: CNPostalAddress = mutable.clone().into();
+        let round_trip: CNMutablePostalAddress = immutable.into();
+
+        assert_eq!(round_trip, mutable);
+    }
+}

@@ -1653,3 +1653,45 @@ impl CNContactRelationLabel {
         CNLabeledValue::<String>::localized_string_for_label(&self.value()?)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn contact_key_values_match_serialized_key_names() {
+        let contact_key_value = CNContactKey::GivenName.value().unwrap();
+        let postal_key_value = CNPostalAddressKey::Street.value().unwrap();
+
+        assert_eq!(contact_key_value, "givenName");
+        assert_eq!(postal_key_value, "street");
+        assert_eq!(
+            contact_key_value,
+            serde_json::from_str::<String>(&serde_json::to_string(&CNContactKey::GivenName).unwrap())
+                .unwrap()
+        );
+        assert_eq!(
+            postal_key_value,
+            serde_json::from_str::<String>(&serde_json::to_string(&CNPostalAddressKey::Street).unwrap())
+                .unwrap()
+        );
+    }
+
+    #[test]
+    fn contacts_error_domain_matches_native_constant() {
+        let first = contacts_error_domain().unwrap();
+        let second = contacts_error_domain().unwrap();
+
+        assert_eq!(first, "CNErrorDomain");
+        assert_eq!(first, second);
+    }
+
+    #[test]
+    fn property_not_fetched_exception_name_matches_native_constant() {
+        let first = contact_property_not_fetched_exception_name().unwrap();
+        let second = contact_property_not_fetched_exception_name().unwrap();
+
+        assert_eq!(first, "CNPropertyNotFetchedException");
+        assert_eq!(first, second);
+    }
+}

@@ -403,3 +403,101 @@ impl CNContact {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use super::*;
+
+    fn contact_from_value(value: serde_json::Value) -> CNContact {
+        serde_json::from_value(value).unwrap()
+    }
+
+    #[test]
+    fn contact_type_round_trips_through_json() {
+        for contact_type in [CNContactType::Person, CNContactType::Organization] {
+            let value = serde_json::to_value(contact_type).unwrap();
+            let decoded: CNContactType = serde_json::from_value(value).unwrap();
+
+            assert_eq!(decoded, contact_type);
+        }
+    }
+
+    #[test]
+    fn contact_sort_order_from_raw_maps_framework_values() {
+        assert_eq!(CNContactSortOrder::from_raw(-1), CNContactSortOrder::None);
+        assert_eq!(CNContactSortOrder::from_raw(1), CNContactSortOrder::UserDefault);
+        assert_eq!(CNContactSortOrder::from_raw(2), CNContactSortOrder::GivenName);
+        assert_eq!(CNContactSortOrder::from_raw(3), CNContactSortOrder::FamilyName);
+    }
+
+    #[test]
+    fn display_name_prefers_given_and_family_name() {
+        let contact = contact_from_value(json!({
+            "identifier": "contact-1",
+            "fetchedKeys": ["givenName", "familyName"],
+            "givenName": "Taylor",
+            "familyName": "Appleseed"
+        }));
+
+        assert_eq!(contact.display_name(), "Taylor Appleseed");
+    }
+
+    #[test]
+    fn display_name_falls_back_to_organization_name() {
+        let contact = contact_from_value(json!({
+            "identifier": "contact-2",
+            "fetchedKeys": ["organizationName"],
+            "organizationName": "Example Incorporated"
+        }));
+
+        assert_eq!(contact.display_name(), "Example Incorporated");
+    }
+
+    #[test]
+    fn display_name_falls_back_to_nickname() {
+        let contact = contact_from_value(json!({
+            "identifier": "contact-3",
+            "fetchedKeys": ["nickname"],
+            "nickname": "TJ"
+        }));
+
+        assert_eq!(contact.display_name(), "TJ");
+    }
+
+    #[test]
+    fn display_name_falls_back_to_identifier() {
+        let contact = contact_from_value(json!({
+            "identifier": "contact-4"
+        }));
+
+        assert_eq!(contact.display_name(), "contact-4");
+    }
+
+    #[test]
+    fn key_availability_checks_identifier_and_fetched_keys() {
+        let contact = contact_from_value(json!({
+            "identifier": "contact-5",
+            "fetchedKeys": ["givenName", "familyName"]
+        }));
+
+        assert!(contact.is_key_available(CNContactKey::Identifier));
+        assert!(contact.is_key_available(CNContactKey::GivenName));
+        assert!(!contact.is_key_available(CNContactKey::EmailAddresses));
+    }
+
+    #[test]
+    fn are_keys_available_requires_all_requested_keys() {
+        let contact = contact_from_value(json!({
+            "identifier": "contact-6",
+            "fetchedKeys": ["givenName", "familyName"]
+        }));
+
+        assert!(contact.are_keys_available(&[CNContactKey::Identifier, CNContactKey::GivenName]));
+        assert!(!contact.are_keys_available(&[
+            CNContactKey::Identifier,
+            CNContactKey::EmailAddresses,
+        ]));
+    }
+}

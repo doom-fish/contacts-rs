@@ -236,3 +236,71 @@ impl ContactsError {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn framework_error() -> NSErrorInfo {
+        NSErrorInfo {
+            domain: "CNErrorDomain".to_owned(),
+            code: CNErrorCode::AuthorizationDenied.raw_value(),
+            message: "denied".to_owned(),
+        }
+    }
+
+    #[test]
+    fn authorization_status_maps_known_framework_values() {
+        assert_eq!(CNAuthorizationStatus::from_raw(0), CNAuthorizationStatus::NotDetermined);
+        assert_eq!(CNAuthorizationStatus::from_raw(1), CNAuthorizationStatus::Restricted);
+        assert_eq!(CNAuthorizationStatus::from_raw(2), CNAuthorizationStatus::Denied);
+        assert_eq!(CNAuthorizationStatus::from_raw(3), CNAuthorizationStatus::Authorized);
+        assert_eq!(CNAuthorizationStatus::from_raw(4), CNAuthorizationStatus::Limited);
+    }
+
+    #[test]
+    fn authorization_status_preserves_unknown_values() {
+        assert_eq!(CNAuthorizationStatus::from_raw(99), CNAuthorizationStatus::Unknown(99));
+    }
+
+    #[test]
+    fn authorization_status_detects_authorized_states() {
+        assert!(!CNAuthorizationStatus::Denied.is_authorized());
+        assert!(CNAuthorizationStatus::Authorized.is_authorized());
+        assert!(CNAuthorizationStatus::Limited.is_authorized());
+    }
+
+    #[test]
+    fn error_code_round_trips_selected_values() {
+        for error_code in [
+            CNErrorCode::CommunicationError,
+            CNErrorCode::AuthorizationDenied,
+            CNErrorCode::RecordDoesNotExist,
+            CNErrorCode::VCardMalformed,
+            CNErrorCode::Unknown(999),
+        ] {
+            assert_eq!(CNErrorCode::from_raw(error_code.raw_value()), error_code);
+        }
+    }
+
+    #[test]
+    fn ns_error_info_display_includes_message_code_and_domain() {
+        assert_eq!(framework_error().to_string(), "denied (100) [CNErrorDomain]");
+    }
+
+    #[test]
+    fn contacts_error_display_formats_each_variant() {
+        assert_eq!(
+            ContactsError::InvalidArgument("bad input".to_owned()).to_string(),
+            "invalid argument: bad input"
+        );
+        assert_eq!(
+            ContactsError::Framework(framework_error()).to_string(),
+            "Contacts.framework error: denied (100) [CNErrorDomain]"
+        );
+        assert_eq!(
+            ContactsError::OperationFailed("bridge failed".to_owned()).to_string(),
+            "contacts operation failed: bridge failed"
+        );
+    }
+}
