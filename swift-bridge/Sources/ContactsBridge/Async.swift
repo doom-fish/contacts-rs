@@ -64,7 +64,14 @@ public func cn_enumerate_contacts_async(
         return
     }
 
+    // Retain the store for the lifetime of the detached Task. The Rust caller
+    // only borrows `&CNContactStore` for the duration of this synchronous call
+    // and may release it (Drop -> cn_store_release) before the Task body runs.
+    // Without this +1 the Task would dereference a freed CNContactStore (UAF).
+    _ = Unmanaged<CNContactStore>.fromOpaque(store).retain()
+
     Task.detached(priority: .userInitiated) {
+        defer { Unmanaged<CNContactStore>.fromOpaque(store).release() }
         do {
             let payload = try requestJSONString.withCString { ptr in
                 try cnrDecodeJSON(UnsafePointer(ptr), as: CNRContactFetchRequestPayload.self)

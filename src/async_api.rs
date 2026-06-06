@@ -67,6 +67,7 @@
 //! ```
 
 use doom_fish_utils::completion::{error_from_cstr, AsyncCompletion, AsyncCompletionFuture};
+use doom_fish_utils::panic_safe::catch_user_panic;
 use std::{
     ffi::c_void,
     future::Future,
@@ -88,12 +89,14 @@ use crate::{
 
 /// FFI callback fired by the Swift bridge when `requestAccess` completes.
 extern "C" fn request_access_cb(granted: bool, error: *const i8, ctx: *mut c_void) {
-    if error.is_null() {
-        unsafe { AsyncCompletion::complete_ok(ctx, granted) };
-    } else {
-        let msg = unsafe { error_from_cstr(error) };
-        unsafe { AsyncCompletion::<bool>::complete_err(ctx, msg) };
-    }
+    catch_user_panic("contacts::request_access_cb", || {
+        if error.is_null() {
+            unsafe { AsyncCompletion::complete_ok(ctx, granted) };
+        } else {
+            let msg = unsafe { error_from_cstr(error) };
+            unsafe { AsyncCompletion::<bool>::complete_err(ctx, msg) };
+        }
+    });
 }
 
 /// [`Future`] returned by [`AsyncCNContactStore::request_access`].
@@ -133,24 +136,26 @@ extern "C" fn enumerate_contacts_cb(
     error: *const i8,
     ctx: *mut c_void,
 ) {
-    if !error.is_null() {
-        let msg = unsafe { error_from_cstr(error) };
-        unsafe { AsyncCompletion::<Vec<CNContact>>::complete_err(ctx, msg) };
-    } else if !result_json.is_null() {
-        match unsafe { parse_json_ptr::<Vec<CNContact>>(result_json, "CNContact list") } {
-            Ok(contacts) => unsafe { AsyncCompletion::complete_ok(ctx, contacts) },
-            Err(e) => unsafe {
-                AsyncCompletion::<Vec<CNContact>>::complete_err(ctx, e.to_string());
-            },
+    catch_user_panic("contacts::enumerate_contacts_cb", || {
+        if !error.is_null() {
+            let msg = unsafe { error_from_cstr(error) };
+            unsafe { AsyncCompletion::<Vec<CNContact>>::complete_err(ctx, msg) };
+        } else if !result_json.is_null() {
+            match unsafe { parse_json_ptr::<Vec<CNContact>>(result_json, "CNContact list") } {
+                Ok(contacts) => unsafe { AsyncCompletion::complete_ok(ctx, contacts) },
+                Err(e) => unsafe {
+                    AsyncCompletion::<Vec<CNContact>>::complete_err(ctx, e.to_string());
+                },
+            }
+        } else {
+            unsafe {
+                AsyncCompletion::<Vec<CNContact>>::complete_err(
+                    ctx,
+                    "Unknown error: both result and error were null".to_string(),
+                );
+            }
         }
-    } else {
-        unsafe {
-            AsyncCompletion::<Vec<CNContact>>::complete_err(
-                ctx,
-                "Unknown error: both result and error were null".to_string(),
-            );
-        }
-    }
+    });
 }
 
 /// [`Future`] returned by [`AsyncCNContactStore::enumerate_contacts`] and
