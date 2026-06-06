@@ -10,7 +10,7 @@ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
 
 [[package]]
 name = "contacts"
-version = "0.3.8"
+version = "0.3.9"
 dependencies = [
  "base64",
  "doom-fish-utils",
@@ -36,7 +36,7 @@ checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
 
 [[package]]
 name = "doom-fish-utils"
-version = "0.3.2"
+version = "0.3.3"
 dependencies = [
  "crossbeam-queue",
  "futures-util",
